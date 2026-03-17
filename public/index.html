@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Bot Control</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>WhatsApp <span>Control</span></h1>
+            <div id="status-badge" class="status-badge">Carregando...</div>
+        </header>
+
+        <main>
+            <section id="auth-section" class="card">
+                <h2>Conexão</h2>
+                <div id="qr-container" class="qr-container">
+                    <p id="qr-placeholder">Aguardando geração do QR Code...</p>
+                    <canvas id="qr-canvas"></canvas>
+                </div>
+                <div class="actions">
+                    <button id="reset-btn" class="secondary">Reiniciar Conexão</button>
+                </div>
+                <p class="hint">Escaneie o código com seu WhatsApp para conectar.</p>
+            </section>
+
+            <section id="control-section" class="card hidden">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="single">Individual</button>
+                    <button class="tab-btn" data-tab="bulk">Em Massa (Seguro)</button>
+                    <button class="tab-btn" data-tab="schedule">Agendar</button>
+                    <button class="tab-btn" data-tab="ai">IA Responder</button>
+                    <button class="tab-btn" data-tab="status">Status</button>
+                </div>
+
+                <div class="control-layout">
+                    <div class="main-form">
+                        <!-- Envio Individual -->
+                        <div id="single-tab" class="tab-content">
+                            <div class="input-group">
+                                <label for="phone">Número (com 55 e DDD)</label>
+                                <input type="text" id="phone" placeholder="Ex: 5511999999999">
+                            </div>
+                            <div class="input-group">
+                                <label for="message">Mensagem</label>
+                                <textarea id="message" rows="3" placeholder="Digite sua mensagem..."></textarea>
+                            </div>
+                            <button id="send-btn">Enviar Agora</button>
+                        </div>
+
+                        <!-- Agendamento -->
+                        <div id="schedule-tab" class="tab-content hidden">
+                            <div class="input-group">
+                                <label for="schedule-phone">Número (com 55 e DDD)</label>
+                                <input type="text" id="schedule-phone" placeholder="Ex: 5511999999999">
+                            </div>
+                            <div class="input-group">
+                                <label for="schedule-datetime">Data e Hora de Envio</label>
+                                <input type="datetime-local" id="schedule-datetime">
+                            </div>
+                            <div class="input-group">
+                                <label for="schedule-message">Mensagem</label>
+                                <textarea id="schedule-message" rows="3"
+                                    placeholder="Mensagem para o futuro..."></textarea>
+                            </div>
+                            <button id="schedule-btn">Confirmar Agendamento</button>
+
+                            <div class="history-list card-inner">
+                                <h3>Próximos Envios</h3>
+                                <div id="scheduled-list" class="mini-list"></div>
+                            </div>
+                        </div>
+
+                        <!-- Envio em Massa -->
+                        <div id="bulk-tab" class="tab-content hidden">
+                            <div class="input-group">
+                                <label for="bulk-numbers">Números (um por linha)</label>
+                                <textarea id="bulk-numbers" rows="5"
+                                    placeholder="5511999999999&#10;5511888888888"></textarea>
+                                <button id="import-clientes-btn" class="secondary mini">Importar Todos Clientes</button>
+                            </div>
+                            <div class="input-group">
+                                <label for="bulk-message">Mensagem para todos</label>
+                                <textarea id="bulk-message" rows="3" placeholder="Mensagem padrão..."></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="bulk-delay">Atraso entre envios (segundos)</label>
+                                <input type="number" id="bulk-delay" value="10" min="5">
+                            </div>
+                            <button id="send-bulk-btn">Agendar Fila de Envio</button>
+                            <div id="queue-info" class="queue-info hidden">
+                                Fila: <span id="queue-count">0</span> mensagens restantes.
+                            </div>
+                        </div>
+
+                        <div id="ai-tab" class="tab-content hidden">
+                            <div class="input-group">
+                                <label for="ai-api-key">Chave API (Gemini ou OpenAI)</label>
+                                <input type="password" id="ai-api-key"
+                                    placeholder="Insira sua chave API do Google Gemini ou OpenAI">
+                            </div>
+                            <div class="input-group">
+                                <label for="ai-prompt">Prompt do Sistema (Instruções para a IA)</label>
+                                <textarea id="ai-prompt" rows="5"
+                                    placeholder="Ex: Você é um assistente de vendas da Zap Encomendas. Seja educado e objetivo..."></textarea>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label>Agente / Modelo</label>
+                                    <select id="ai-model">
+                                        <optgroup label="Google Gemini">
+                                            <option value="gemini-pro">Gemini Pro</option>
+                                            <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                                            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                                        </optgroup>
+                                        <optgroup label="OpenAI (ChatGPT)">
+                                            <option value="gpt-4o-mini">GPT-4o Mini (Econômico)</option>
+                                            <option value="gpt-4o">GPT-4o (Poderoso)</option>
+                                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Legado)</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Auto-Responder Ativo?</label>
+                                    <select id="ai-active">
+                                        <option value="false">Não</option>
+                                        <option value="true">Sim</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Responder Todos?</label>
+                                    <select id="ai-reply-all">
+                                        <option value="false">Apenas Selecionados</option>
+                                        <option value="true">Todos os Contatos</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group" style="flex: 1;">
+                                    <label>Voz da IA (OpenAI)</label>
+                                    <select id="ai-voice">
+                                        <option value="alloy">Alloy (Padrão - Neutra)</option>
+                                        <option value="echo">Echo (Masculina suave)</option>
+                                        <option value="fable">Fable (Narrativa britânica)</option>
+                                        <option value="onyx">Onyx (Masculina Robusta)</option>
+                                        <option value="nova">Nova (Feminina Enérgica)</option>
+                                        <option value="shimmer">Shimmer (Feminina Clara)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button id="save-ai-settings">Salvar Configurações de IA</button>
+
+                            <div class="history-list card-inner">
+                                <div class="flex-between">
+                                    <h3>Configurar Usuários (IA)</h3>
+                                    <div class="bulk-actions">
+                                        <button id="ai-select-all" class="secondary mini">Selecionar Todos</button>
+                                        <button id="ai-deselect-all" class="secondary mini">Desselecionar Todos</button>
+                                    </div>
+                                </div>
+                                <div class="search-box">
+                                    <input type="text" id="ai-search-users" placeholder="Filtrar por nome ou número...">
+                                </div>
+                                <div id="ai-users-selection-list" class="mini-list ai-selection-grid">
+                                    <!-- Lista de usuários com checkbox será injetada aqui -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Postar Status -->
+                        <div id="status-tab" class="tab-content hidden">
+                            <div class="tabs mini-tabs">
+                                <button class="tab-btn active" data-subtab="media">Mídia (Foto/Vídeo)</button>
+                                <button class="tab-btn" data-subtab="text">Texto Colorido</button>
+                            </div>
+
+                            <!-- Subtab Mídia -->
+                            <div id="subtab-media" class="subtab-content">
+                                <div class="input-group">
+                                    <label for="status-file">Imagem ou Vídeo (Opcional)</label>
+                                    <input type="file" id="status-file" accept="image/*,video/*">
+                                </div>
+                            </div>
+
+                            <!-- Subtab Texto Customizado -->
+                            <div id="subtab-text" class="subtab-content hidden">
+                                <div class="input-row">
+                                    <div class="input-group">
+                                        <label>Fundo</label>
+                                        <input type="color" id="status-bg-color" value="#10b981">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Texto</label>
+                                        <input type="color" id="status-text-color" value="#ffffff">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Fonte</label>
+                                        <select id="status-font">
+                                            <option value="Outfit">Outfit</option>
+                                            <option value="Arial">Arial</option>
+                                            <option value="Courier New">Terminal</option>
+                                            <option value="Georgia">Serrif</option>
+                                            <option value="cursive">Manuscrita</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="status-preview" class="media-preview hidden"></div>
+
+                            <div class="input-group">
+                                <label for="status-message">Mensagem ou Status</label>
+                                <textarea id="status-message" rows="3" placeholder="Digite aqui..."></textarea>
+                            </div>
+                            <button id="send-status-btn">Postar no Status</button>
+                            <canvas id="status-canvas" width="1080" height="1920" style="display:none;"></canvas>
+
+                            <div class="card-inner" style="margin-top: 2rem;">
+                                <div class="flex-between">
+                                    <h3>Status Automático (IA)</h3>
+                                </div>
+                                <div class="input-row">
+                                    <div class="input-group">
+                                        <label>Ativar Automação?</label>
+                                        <select id="auto-status-active">
+                                            <option value="false">Não</option>
+                                            <option value="true">Sim</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Tipo de Status</label>
+                                        <select id="auto-status-type">
+                                            <option value="text">Apenas Texto</option>
+                                            <option value="image">Imagem IA + Legenda</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Temas para Pesquisa (Trends)</label>
+                                    <input type="text" id="auto-status-themes"
+                                        placeholder="Ex: Tecnologia, Moda, Notícias (Separados por vírgula)">
+                                </div>
+                                <div class="input-group">
+                                    <label>Prompt para Geração (IA)</label>
+                                    <textarea id="auto-status-prompt" rows="2"
+                                        placeholder="Ex: Crie uma frase motivacional curta sobre o mercado atual..."></textarea>
+                                </div>
+                                <div class="input-row">
+                                    <div class="input-group">
+                                        <label>Intervalo (Minutos)</label>
+                                        <input type="number" id="auto-status-interval" value="60" min="15">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Hora Início</label>
+                                        <input type="time" id="auto-status-start" value="08:00">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Hora Término</label>
+                                        <input type="time" id="auto-status-end" value="22:00">
+                                    </div>
+                                </div>
+                                <button id="save-auto-status" class="secondary">Salvar Automação de Status</button>
+
+                                <div class="history-list card-inner"
+                                    style="margin-top: 1.5rem; border-top: 1px dashed #334155;">
+                                    <h3>Histórico de Posts Automáticos</h3>
+                                    <div id="auto-status-list" class="mini-list" style="max-height: 200px;">
+                                        <!-- Logs de status automático serão injetados aqui -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="side-panel">
+                        <div class="search-box">
+                            <input type="text" id="search-clientes" placeholder="Buscar cliente...">
+                        </div>
+                        <div id="clientes-sidebar-list" class="mini-list">
+                            <!-- Lista de clientes será injetada aqui -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Logs de Atividade</h2>
+                <div id="logs" class="logs-container">
+                    <div class="log-entry system">Sistema iniciado...</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

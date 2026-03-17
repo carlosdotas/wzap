@@ -1,0 +1,995 @@
+{
+  "scheduledMessages": [],
+  "aiSettings": {
+    "apiKey": "",
+    "prompt": "Você é Amanda, a agente oficial de atendimento da Zap Encomendas no WhatsApp. Seu atendimento deve ser carismático, educado, direto e objetivo, com respostas sempre curtas, claras e humanas, evitando textos longos. Você atende clientes que buscam coleta, entrega, orçamento ou status de encomendas em Goiânia, Anápolis e região. O atendimento é exclusivamente via WhatsApp, usando linguagem simples, amigável e profissional. Regra obrigatória: em toda conversa, você deve sempre solicitar a localização do cliente (localização do WhatsApp ou endereço completo) antes de informar valores, prazos, confirmar coleta ou fornecer qualquer detalhe operacional. Sempre conduza a conversa para o envio da localização. Após receber a localização, solicite apenas as informações essenciais, como local de destino, tipo de encomenda e peso. Nunca invente informações. Se faltar algum dado, peça de forma educada e objetiva. Caso o cliente não envie a localização, reforce o pedido de forma simpática. Seu tom deve transmitir rapidez, confiança e eficiência, como um atendimento humano e ágil típico de WhatsApp, focado em resolver rápido e avançar para a próxima etapa do serviço.",
+    "model": "gpt-4o-mini",
+    "active": false,
+    "replyAll": true,
+    "voice": "nova"
+  },
+  "users": {
+    "-Od5eZ-_8Ne1DzUFqfpH": {
+      "aiEnabled": false,
+      "nome": "Carlos Dotas",
+      "telefone": "62998000714"
+    },
+    "-Od3sM8gBXvf_QmnJZU0": {
+      "aiEnabled": true,
+      "nome": "Zap Encomendas",
+      "telefone": "62996157340"
+    },
+    "-Od5xaGjpXRU3dmnhCT9": {
+      "aiEnabled": false,
+      "nome": "Grazielly Menezes",
+      "telefone": "556292868180"
+    }
+  },
+  "logs": {
+    "sent": [
+      {
+        "to": "556298000714@c.us",
+        "message": "[Erro IA: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:06:19.609Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "[Erro IA: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:08:40.229Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "[Erro IA: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:10:40.524Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "[Erro IA: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:12:32.812Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "[Erro IA: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:14:18.005Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "[Erro IA: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:14:35.880Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Olá! Como posso ajudá-lo hoje?",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:17:11.905Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Tudo certo, obrigado! Como posso ajudar você hoje?",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:17:20.899Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Olá! Como posso ajudar você hoje?",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:18:13.971Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Olá! Como posso ajudar você hoje?",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:18:45.322Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Olá! Como posso ajudar você hoje?",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:20:02.833Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Tudo bem, obrigado! E você, como posso ajudá-lo hoje?",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:20:13.093Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Olá! Como posso ajudá-lo hoje?",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:23:39.002Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Olá, Carlos! Como posso ajudá-lo hoje?",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:23:48.547Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Desculpe, mas eu não tenho acesso a informações pessoais ou dados de clientes, incluindo o seu nome. Como posso ajudá-lo hoje?",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:23:59.339Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Olá! Como posso ajudar você hoje?",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:27:08.889Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Olá! Como posso ajudar você hoje?",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:32:34.864Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Olá! Como posso ajudar você hoje?",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:36:42.987Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "E aí! Manda o Davi falar comigo, que eu ajudo ele com o que precisar. Pode perguntar à vontade!",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:37:12.890Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Obrigado! Fico feliz que você tenha gostado. Estou aqui para ajudar com qualquer dúvida ou informação que você precise sobre as encomendas e serviços. Se precisar de algo, é só avisar!",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:37:49.187Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Eu sou uma assistente virtual da Zap Encomendas, não tenho uma localização física. Estou aqui para ajudar com suas perguntas e necessidades relacionadas a encomendas! Como posso te ajudar hoje?",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:37:53.726Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "E aí! Tudo tranquilo por aqui. Como posso ajudar você hoje?",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:42:34.778Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Que bom! Se precisar de alguma informação ou ajuda com suas encomendas, é só dizer!",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:43:14.095Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Prazer em conhecê-lo, Carlos Dottas! Como posso ajudá-lo hoje?",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:43:29.892Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Seu nome é Carlos Dottas. Como posso assisti-lo?",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:43:45.213Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Eu sou apenas texto, então não tenho uma voz para compartilhar. Mas estou aqui para ajudar com qualquer informação ou pergunta que você tenha! O que mais posso fazer por você?",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:44:49.068Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Entendo sua curiosidade! Sou um assistente virtual baseado em texto e não tenho uma voz própria. Porém, em algumas plataformas, eu posso ser convertido em fala por meio de tecnologia de síntese de voz. Se precisar de algo mais, estou aqui para ajudar!",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:45:27.672Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Certo! Se você tiver mais alguma pergunta ou algo que queira saber, estou aqui para ajudar. Como posso assisti-lo agora?",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:46:30.430Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Claro! Se precisar de ajuda com o áudio ou tiver alguma dúvida sobre o processo, é só me avisar!",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:50:43.274Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Oi! Estou aqui para te ajudar! 😊 Para começarmos, você pode me enviar a sua localização? Assim, consigo te atender melhor.",
+        "type": "ai_voice_reply",
+        "timestamp": "2026-02-08T22:56:12.162Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Oi! Como posso ajudar você hoje? Para que eu possa te atender melhor, poderia enviar sua localização (localização do WhatsApp ou endereço completo)? Assim consigo passar informações detalhadas sobre coleta ou entrega. 😊",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T22:56:36.466Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Oi! Tudo bem? Me envie sua localização para que eu possa te ajudar da melhor forma! 😊",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-08T23:20:05.749Z"
+      },
+      {
+        "to": "556298000714",
+        "message": "teste",
+        "timestamp": "2026-02-13T02:00:30.890Z"
+      },
+      {
+        "to": "556298000714",
+        "message": "fghfgh",
+        "timestamp": "2026-02-13T02:00:49.754Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "Oi! Parece que você está tentando se conectar ao nosso atendimento. Para que eu possa te ajudar melhor, você pode me enviar a sua localização (localização do WhatsApp ou endereço completo)? 😊",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-13T02:12:27.845Z"
+      },
+      {
+        "to": "556298000714",
+        "message": "teste ok",
+        "timestamp": "2026-02-15T19:59:28.202Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "[Erro OpenAI: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.]",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-15T19:59:50.770Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "[Erro OpenAI: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.]",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-15T20:00:04.578Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "[Erro OpenAI: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.]",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-15T20:00:18.425Z"
+      },
+      {
+        "to": "556298000714@c.us",
+        "message": "[Erro OpenAI: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.]",
+        "type": "ai_auto_reply",
+        "timestamp": "2026-02-15T20:00:41.146Z"
+      },
+      {
+        "to": "556298194485",
+        "message": "tete",
+        "timestamp": "2026-03-05T00:45:05.344Z"
+      },
+      {
+        "to": "556296157340",
+        "message": "teste",
+        "timestamp": "2026-03-05T00:45:29.640Z"
+      },
+      {
+        "to": "556296157340",
+        "message": "novo",
+        "timestamp": "2026-03-05T00:45:38.060Z"
+      },
+      {
+        "to": "556296157340",
+        "message": "fghfgh",
+        "timestamp": "2026-03-05T00:46:03.461Z"
+      },
+      {
+        "to": "556298000714",
+        "message": "teste",
+        "timestamp": "2026-03-05T00:46:33.986Z"
+      },
+      {
+        "to": "556298000714",
+        "message": "teste",
+        "timestamp": "2026-03-17T18:00:13.503Z"
+      }
+    ],
+    "received": [
+      {
+        "from": "556298000714@c.us",
+        "body": "Oi",
+        "timestamp": "2026-02-08T21:33:33.117Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T21:33:55.360Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T21:36:07.992Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T21:37:57.842Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ok",
+        "timestamp": "2026-02-08T21:38:41.866Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T21:40:01.164Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Opa",
+        "timestamp": "2026-02-08T21:40:11.144Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T21:41:11.192Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T21:43:07.946Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Tapetes disponíveis...",
+        "timestamp": "2026-02-08T21:44:18.746Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T21:44:53.039Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Cobre leito casal padrão...",
+        "timestamp": "2026-02-08T21:45:50.654Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T21:46:24.521Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Mantas disponíveis tamanho casal...",
+        "timestamp": "2026-02-08T21:46:43.441Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Oi",
+        "timestamp": "2026-02-08T21:47:17.203Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Mantas casal disponíveis",
+        "timestamp": "2026-02-08T21:47:44.456Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Mantas casal disponíveis.....",
+        "timestamp": "2026-02-08T21:48:35.156Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T21:49:43.883Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Manta casal",
+        "timestamp": "2026-02-08T21:49:46.302Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "OpA",
+        "timestamp": "2026-02-08T21:50:46.624Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Panos de prato unidades 8$ atoalhado..",
+        "timestamp": "2026-02-08T21:51:11.572Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Panos de prato tampa tudo.. 19.99$ disponíveis",
+        "timestamp": "2026-02-08T21:51:12.382Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Pano tampa tudo",
+        "timestamp": "2026-02-08T21:51:13.100Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Mantas casal disponíveis.. 39.99$  cada",
+        "timestamp": "2026-02-08T21:52:46.517Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T21:55:06.657Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T21:56:04.476Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T21:57:03.517Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:02:04.547Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:04:30.566Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:05:20.169Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:06:17.900Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:07:17.108Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:08:37.229Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:09:18.783Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:10:37.996Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:10:56.418Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:12:08.564Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:12:30.593Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:13:11.729Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:14:16.602Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "https://vt.tiktok.com/ZSm1VtM8F/",
+        "timestamp": "2026-02-08T22:14:27.459Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:14:33.619Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Duas bolsas pelo valor de r$ 129 o kit.....Você encontra em RAQUELL Enxovais..",
+        "timestamp": "2026-02-08T22:16:18.484Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:17:10.493Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Tudo ok?",
+        "timestamp": "2026-02-08T22:17:19.244Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:18:06.540Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:18:12.742Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:18:44.415Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:18:48.919Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:18:49.571Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:18:50.297Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:18:51.362Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:18:52.065Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:18:53.004Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "",
+        "timestamp": "2026-02-08T22:18:53.928Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:19:58.776Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Tudo bem?",
+        "timestamp": "2026-02-08T22:20:08.118Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Ver disponibilidade de cor...",
+        "timestamp": "2026-02-08T22:23:08.376Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:23:10.674Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:23:34.954Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Meu nome e carlos",
+        "timestamp": "2026-02-08T22:23:44.700Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Qual o meu nome?",
+        "timestamp": "2026-02-08T22:23:50.435Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "[Mídia: image]",
+        "timestamp": "2026-02-08T22:24:31.736Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:26:53.876Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:27:06.062Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:28:44.546Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:31:58.844Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:32:30.846Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:35:14.009Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:36:33.319Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:37:01.133Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:37:33.538Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:37:38.690Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:41:47.618Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:42:02.682Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ola",
+        "timestamp": "2026-02-08T22:42:10.048Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:42:26.229Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ta certo",
+        "timestamp": "2026-02-08T22:43:08.100Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:43:20.444Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:43:37.941Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:44:34.877Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:45:11.343Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:46:17.160Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Vovó ama muito 😻❤️",
+        "timestamp": "2026-02-08T22:48:57.398Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:50:31.254Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "https://vt.tiktok.com/ZSm1bQwAP/",
+        "timestamp": "2026-02-08T22:51:29.850Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T22:55:57.869Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "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",
+        "timestamp": "2026-02-08T22:56:27.334Z"
+      },
+      {
+        "from": "556296725545@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-02-08T23:17:52.523Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Opa",
+        "timestamp": "2026-02-08T23:19:59.365Z"
+      },
+      {
+        "from": "556296725545@c.us",
+        "body": "Claro, vamos resumir o que vimos no backtest para termos uma visão clara.\n\nAtualmente, o robô está apresentando um lucro líquido negativo de -6,12 USD, o que indica que as perdas ainda superam os ganhos. O fator de lucro está em 0,51, o que significa que, para cada dólar ganho, há cerca de dois dólares perdidos. O índice de Sharpe também está negativo, o que mostra que o risco não está sendo recompensado.\n\nA qualidade do histórico é ótima, com 100% de qualidade, e o drawdown é bem baixo (0,13%), o que é positivo em termos de segurança da conta.\n\nPortanto, o resumo é que a estratégia precisa de ajustes para melhorar a relação entre lucro e perda, especialmente no que diz respeito às entradas de compra e à gestão dos trades.",
+        "timestamp": "2026-02-08T23:20:47.336Z"
+      },
+      {
+        "from": "141652735873052@lid",
+        "body": "",
+        "timestamp": "2026-02-13T02:00:12.040Z"
+      },
+      {
+        "from": "215598852243467@lid",
+        "body": "",
+        "timestamp": "2026-02-13T02:00:20.943Z"
+      },
+      {
+        "from": "215598852243467@lid",
+        "body": "",
+        "timestamp": "2026-02-13T02:00:20.954Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "OpenClaw: access not configured.\n\nYour WhatsApp phone number: +556298194485\n\nPairing code: 2MASPVZQ\n\nAsk the bot owner to approve with:\nopenclaw pairing approve whatsapp 2MASPVZQ",
+        "timestamp": "2026-02-13T02:12:17.096Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Ótimo! Se precisar de mais ajuda ou quiser continuar com a configuração, estou aqui para ajudar. O que você gostaria de fazer a seguir?",
+        "timestamp": "2026-02-15T19:59:33.001Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Parece que atingimos o limite de uso da API. Infelizmente, isso significa que não posso fazer mais solicitações para configurar o ambiente gráfico ou navegação no momento.\n\nVocê ainda pode acessar os recursos que foram configurados até agora. Se precisar de assistência sobre como proceder ou de alternativas que não dependam da API, é só pedir!",
+        "timestamp": "2026-02-15T19:59:53.560Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Atualmente, estamos enfrentando um limite de quota com a API, o que impede novas solicitações.\n\nContudo, todos os recursos configurados até agora podem ser utilizados. Se precisar de algo que não dependa da API, estou aqui para ajudar! O que você gostaria de fazer a seguir?",
+        "timestamp": "2026-02-15T20:00:07.839Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Parece que a situação com a quota da API está impedindo novas interações. Nesse caso, seria melhor focar nas ações que você já possui configuradas ou em soluções alternativas.\n\nSe puder me informar como gostaria de prosseguir, ficarei feliz em ajudar!",
+        "timestamp": "2026-02-15T20:00:29.227Z"
+      },
+      {
+        "from": "556298000714@c.us",
+        "body": "Parece que o limite de quota da API está resultando em erros repetidos. Isso impede novas solicitações e funcionalidades que dependem da API.\n\nVocê ainda pode usar os recursos que já foram configurados, como o servidor web e o acesso remoto. Se precisar de ajuda com isso ou se houver outra questão em que possa ajudar, por favor, deixe-me saber!",
+        "timestamp": "2026-02-15T20:00:52.290Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "[Mídia: video]",
+        "timestamp": "2026-03-05T01:54:00.806Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "[Mídia: video]",
+        "timestamp": "2026-03-05T01:54:03.520Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "[Mídia: video]",
+        "timestamp": "2026-03-05T01:54:04.328Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "https://share.google/K1HfLtABztAd4sTsl",
+        "timestamp": "2026-03-17T18:04:13.543Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "Pegar com Denilson da expedição loja canedo",
+        "timestamp": "2026-03-17T18:04:13.844Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "BEGIN:VCARD\nVERSION:3.0\nN:;Denilson Loja Canedo ;;;\nFN:Denilson Loja Canedo  \nTEL;type=CELL;type=VOICE;waid=556294592704:+55 62 99459-2704\nEND:VCARD",
+        "timestamp": "2026-03-17T18:04:13.944Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "[Mídia: image]",
+        "timestamp": "2026-03-17T18:04:14.155Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-03-17T18:04:19.206Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "[Mídia: ptt]",
+        "timestamp": "2026-03-17T18:04:56.929Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "Ta",
+        "timestamp": "2026-03-17T18:05:58.223Z"
+      },
+      {
+        "from": "120363236559771050@g.us",
+        "body": "[Mídia: video]",
+        "timestamp": "2026-03-17T18:07:26.124Z"
+      },
+      {
+        "from": "120363236559771050@g.us",
+        "body": "[Mídia: video]",
+        "timestamp": "2026-03-17T18:07:27.794Z"
+      },
+      {
+        "from": "120363236559771050@g.us",
+        "body": "[Mídia: video]",
+        "timestamp": "2026-03-17T18:07:28.534Z"
+      },
+      {
+        "from": "120363236559771050@g.us",
+        "body": "[Mídia: video]",
+        "timestamp": "2026-03-17T18:07:29.602Z"
+      },
+      {
+        "from": "120363236559771050@g.us",
+        "body": "[Mídia: video]",
+        "timestamp": "2026-03-17T18:07:30.854Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "Pode mandar",
+        "timestamp": "2026-03-17T18:08:03.399Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "Avisei o vendedor",
+        "timestamp": "2026-03-17T18:08:07.287Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "Gabriela Martins",
+        "timestamp": "2026-03-17T18:13:19.094Z"
+      },
+      {
+        "from": "120363236559771050@g.us",
+        "body": "[Mídia: image]",
+        "timestamp": "2026-03-17T18:15:52.230Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "Kkkk",
+        "timestamp": "2026-03-17T18:23:48.021Z"
+      },
+      {
+        "from": "556296157340@c.us",
+        "body": "Vai dar certo",
+        "timestamp": "2026-03-17T18:23:53.933Z"
+      },
+      {
+        "from": "status@broadcast",
+        "body": "Vem sem medo pq aqui é na hora ou no mesmo dia J A CELULARES ATENDIMENTO ATÉ AS 20H00 DA NOITE",
+        "timestamp": "2026-03-17T18:24:21.468Z"
+      }
+    ]
+  },
+  "chatHistory": {
+    "556298000714": [
+      {
+        "role": "user",
+        "content": "Meu nome é Carlos Dottas."
+      },
+      {
+        "role": "assistant",
+        "content": "Prazer em conhecê-lo, Carlos Dottas! Como posso ajudá-lo hoje?"
+      },
+      {
+        "role": "user",
+        "content": "Qual que é o meu nome?"
+      },
+      {
+        "role": "assistant",
+        "content": "Seu nome é Carlos Dottas. Como posso assisti-lo?"
+      },
+      {
+        "role": "user",
+        "content": "Deixa eu ver sua voz agora, como é que ficou."
+      },
+      {
+        "role": "assistant",
+        "content": "Eu sou apenas texto, então não tenho uma voz para compartilhar. Mas estou aqui para ajudar com qualquer informação ou pergunta que você tenha! O que mais posso fazer por você?"
+      },
+      {
+        "role": "user",
+        "content": "Pois é, eu queria saber qual que é a sua voz verdadeira."
+      },
+      {
+        "role": "assistant",
+        "content": "Entendo sua curiosidade! Sou um assistente virtual baseado em texto e não tenho uma voz própria. Porém, em algumas plataformas, eu posso ser convertido em fala por meio de tecnologia de síntese de voz. Se precisar de algo mais, estou aqui para ajudar!"
+      },
+      {
+        "role": "user",
+        "content": "É, vamos ver como é que ficou agora."
+      },
+      {
+        "role": "assistant",
+        "content": "Certo! Se você tiver mais alguma pergunta ou algo que queira saber, estou aqui para ajudar. Como posso assisti-lo agora?"
+      },
+      {
+        "role": "user",
+        "content": "Pois é, vamos ver como ficou o áudio agora."
+      },
+      {
+        "role": "assistant",
+        "content": "Claro! Se precisar de ajuda com o áudio ou tiver alguma dúvida sobre o processo, é só me avisar!"
+      },
+      {
+        "role": "user",
+        "content": "E aí, fala comigo, como é que você está?"
+      },
+      {
+        "role": "assistant",
+        "content": "Oi! Estou aqui para te ajudar! 😊 Para começarmos, você pode me enviar a sua localização? Assim, consigo te atender melhor."
+      },
+      {
+        "role": "user",
+        "content": "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"
+      },
+      {
+        "role": "assistant",
+        "content": "Oi! Como posso ajudar você hoje? Para que eu possa te atender melhor, poderia enviar sua localização (localização do WhatsApp ou endereço completo)? Assim consigo passar informações detalhadas sobre coleta ou entrega. 😊"
+      },
+      {
+        "role": "user",
+        "content": "Opa"
+      },
+      {
+        "role": "assistant",
+        "content": "Oi! Tudo bem? Me envie sua localização para que eu possa te ajudar da melhor forma! 😊"
+      },
+      {
+        "role": "user",
+        "content": "OpenClaw: access not configured.\n\nYour WhatsApp phone number: +556298194485\n\nPairing code: 2MASPVZQ\n\nAsk the bot owner to approve with:\nopenclaw pairing approve whatsapp 2MASPVZQ"
+      },
+      {
+        "role": "assistant",
+        "content": "Oi! Parece que você está tentando se conectar ao nosso atendimento. Para que eu possa te ajudar melhor, você pode me enviar a sua localização (localização do WhatsApp ou endereço completo)? 😊"
+      }
+    ]
+  }
+}
