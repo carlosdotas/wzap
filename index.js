@@ -78,7 +78,9 @@ const client = new Client({
             '--disable-gpu',
             '--disable-software-rasterizer',
             '--disable-extensions',
-            '--shm-size=1gb'
+            '--disable-background-timer-throttling',
+            '--disable-backgrounding-occluded-windows',
+            '--disable-renderer-backgrounding'
         ],
     }
 });
@@ -784,13 +786,14 @@ client.on('message', async (msg) => {
 });
 
 client.on('disconnected', (reason) => {
+    console.log('WhatsApp desconectado:', reason);
     whatsappStatus = 'Desconectado';
     io.emit('status', whatsappStatus);
-    client.initialize();
+    client.initialize().catch(err => console.error('Erro ao reconectar:', err));
 });
 
 // Iniciar servidor
 server.listen(port, () => {
     console.log(`Interface rodando em http://localhost:${port}`);
-    client.initialize();
+    client.initialize().catch(err => console.error('Erro ao iniciar cliente WhatsApp:', err));
 });

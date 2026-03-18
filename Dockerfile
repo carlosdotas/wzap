@@ -1,26 +1,22 @@
-FROM node:20-slim
+FROM node:20-bookworm-slim
 
-# Dependências do Chromium para whatsapp-web.js
 RUN apt-get update && apt-get install -y \
     chromium \
     fonts-liberation \
-    fonts-ipafont-gothic \
-    fonts-wqy-zenhei \
-    fonts-thai-tlwg \
-    fonts-kacst \
-    fonts-freefont-ttf \
-    libappindicator3-1 \
     libasound2 \
     libatk-bridge2.0-0 \
     libatk1.0-0 \
     libcups2 \
     libdbus-1-3 \
+    libdrm2 \
+    libgbm1 \
     libgdk-pixbuf2.0-0 \
     libnspr4 \
     libnss3 \
     libx11-xcb1 \
     libxcomposite1 \
     libxdamage1 \
+    libxkbcommon0 \
     libxrandr2 \
     xdg-utils \
     --no-install-recommends && \
@@ -37,6 +33,6 @@ RUN npm ci --omit=dev
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 8080
 
 CMD ["node", "index.js"]
