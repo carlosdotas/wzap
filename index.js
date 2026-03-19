@@ -71,6 +71,11 @@ const client = new Client({
         clientId: "client-one",
         ...(authDataPath && { dataPath: authDataPath })
     }),
+    // Carrega o WhatsApp Web de cache remoto (GitHub) para evitar bloqueios de IP do Cloud Run
+    webVersionCache: {
+        type: 'remote',
+        remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/{version}.html',
+    },
     authTimeoutMs: 0, // Sem timeout para autenticação (aguarda QR ser escaneado)
     puppeteer: {
         headless: 'new',
