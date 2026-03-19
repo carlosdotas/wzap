@@ -73,7 +73,7 @@ const client = new Client({
     }),
     authTimeoutMs: 0, // Sem timeout para autenticação (aguarda QR ser escaneado)
     puppeteer: {
-        headless: true,
+        headless: 'new',
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome-stable',
         protocolTimeout: 300000, // 5 min — Cloud Run pode ser lento para iniciar Chrome
         args: [
@@ -83,7 +83,6 @@ const client = new Client({
             '--disable-accelerated-2d-canvas',
             '--no-first-run',
             '--disable-gpu',
-            '--no-zygote',
             '--single-process',
             '--disable-software-rasterizer',
             '--disable-extensions',
