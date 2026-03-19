@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Monitor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --primary: #10b981;
+            --primary-glow: rgba(16, 185, 129, 0.15);
+            --text: #f8fafc;
+            --dim: #94a3b8;
+            --border: #334155;
+            --bubble: #1a2e22;
+            --danger: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 1rem 2rem;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        header h1 span { color: var(--primary); }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #64748b;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        .status-dot.connected { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+        .status-dot.disconnected { background: var(--danger); }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-label {
+            font-size: 0.8rem;
+            color: var(--dim);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .counter {
+            background: var(--primary-glow);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .back-link {
+            color: var(--dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--text); }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 860px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+            gap: 0.75rem;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .toolbar input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.5rem 0.75rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .toolbar input:focus { border-color: var(--primary); }
+        .toolbar input::placeholder { color: var(--dim); }
+
+        .btn-clear {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--dim);
+            font-family: inherit;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-clear:hover { border-color: var(--danger); color: var(--danger); }
+
+        .btn-pause {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--dim);
+            font-family: inherit;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-pause.paused { border-color: var(--primary); color: var(--primary); }
+        .btn-pause:hover { border-color: var(--text); color: var(--text); }
+
+        #messages-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .msg-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 0.9rem 1.1rem;
+            display: flex;
+            gap: 0.9rem;
+            animation: fadeIn 0.3s ease;
+            transition: opacity 0.2s;
+        }
+
+        .msg-card.filtered-out { display: none; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--primary-glow);
+            border: 1.5px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .msg-avatar.media { border-color: #7c3aed; background: rgba(124, 58, 237, 0.15); }
+        .msg-avatar.audio { border-color: #f59e0b; background: rgba(245, 158, 11, 0.15); }
+        .msg-avatar.image { border-color: #3b82f6; background: rgba(59, 130, 246, 0.15); }
+
+        .msg-content { flex: 1; min-width: 0; }
+
+        .msg-header {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            margin-bottom: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .msg-from {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+
+        .msg-time {
+            font-size: 0.75rem;
+            color: var(--dim);
+        }
+
+        .msg-type-badge {
+            font-size: 0.7rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 999px;
+            background: rgba(124, 58, 237, 0.2);
+            color: #a78bfa;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+        .msg-type-badge.audio { background: rgba(245,158,11,0.15); color: #fbbf24; border-color: rgba(245,158,11,0.3); }
+        .msg-type-badge.image { background: rgba(59,130,246,0.15); color: #60a5fa; border-color: rgba(59,130,246,0.3); }
+        .msg-type-badge.text { display: none; }
+
+        .msg-body {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.5;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .msg-body.empty { color: var(--dim); font-style: italic; }
+
+        .new-badge {
+            font-size: 0.7rem;
+            padding: 0.1rem 0.5rem;
+            border-radius: 999px;
+            background: var(--primary);
+            color: #000;
+            font-weight: 700;
+            animation: pulse 1.5s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--dim);
+            padding: 4rem 2rem;
+            font-size: 0.95rem;
+        }
+
+        .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.75rem;
+            color: var(--dim);
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>&#128247; WhatsApp <span>Monitor</span></h1>
+        <div class="header-right">
+            <span class="status-label">
+                <span class="status-dot" id="status-dot"></span>
+                <span id="status-text">Conectando...</span>
+            </span>
+            <span class="counter" id="msg-count">0</span>
+            <a href="/" class="back-link">&#8592; Painel</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="toolbar">
+            <input type="text" id="search" placeholder="Filtrar por número ou mensagem...">
+            <button class="btn-pause" id="btn-pause">&#9646;&#9646; Pausar</button>
+            <button class="btn-clear" id="btn-clear">&#128465; Limpar tela</button>
+        </div>
+
+        <div id="messages-container">
+            <div class="empty-state" id="empty-state">
+                <div class="icon">&#128236;</div>
+                <p>Aguardando mensagens do WhatsApp...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>Monitor em tempo real &mdash; <span id="footer-time"></span></footer>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const container = document.getElementById('messages-container');
+        const emptyState = document.getElementById('empty-state');
+        const countEl = document.getElementById('msg-count');
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
+        const searchEl = document.getElementById('search');
+        const btnPause = document.getElementById('btn-pause');
+        const btnClear = document.getElementById('btn-clear');
+        const footerTime = document.getElementById('footer-time');
+
+        let totalCount = 0;
+        let isPaused = false;
+        let pendingMessages = [];
+
+        // Clock
+        function updateClock() {
+            footerTime.textContent = new Date().toLocaleString('pt-BR');
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Status
+        socket.on('status', (s) => {
+            const connected = typeof s === 'string' && s.toLowerCase().includes('pront');
+            statusDot.className = 'status-dot ' + (connected ? 'connected' : 'disconnected');
+            statusText.textContent = s || 'Desconhecido';
+        });
+
+        socket.on('ready', () => {
+            statusDot.className = 'status-dot connected';
+            statusText.textContent = 'Conectado';
+        });
+
+        socket.on('disconnect', () => {
+            statusDot.className = 'status-dot disconnected';
+            statusText.textContent = 'Desconectado';
+        });
+
+        // Build message card
+        function buildCard(data, isNew = false) {
+            const { from, body, timestamp, type } = data;
+            const time = timestamp ? new Date(timestamp).toLocaleString('pt-BR') : new Date().toLocaleString('pt-BR');
+            const number = from ? from.replace('@c.us', '').replace('@g.us', '') : 'Desconhecido';
+            const initial = number.charAt(number.length - 1).toUpperCase();
+            const msgType = type || 'text';
+            const isEmpty = !body || body.trim() === '';
+
+            const avatarClass = msgType.includes('audio') || msgType === 'ptt' ? 'audio'
+                              : msgType === 'image' ? 'image'
+                              : msgType !== 'text' && msgType !== 'chat' ? 'media'
+                              : '';
+
+            const typeIcon = msgType === 'ptt' || msgType === 'audio' ? '&#127908;'
+                           : msgType === 'image' ? '&#128247;'
+                           : msgType === 'video' ? '&#127909;'
+                           : msgType === 'document' ? '&#128196;'
+                           : msgType === 'sticker' ? '&#127881;'
+                           : '&#128172;';
+
+            const badgeClass = msgType === 'ptt' || msgType === 'audio' ? 'audio'
+                             : msgType === 'image' ? 'image'
+                             : msgType === 'text' || msgType === 'chat' ? 'text' : '';
+
+            const badgeLabel = msgType === 'ptt' ? 'Áudio' : msgType !== 'text' && msgType !== 'chat' ? msgType : '';
+
+            const card = document.createElement('div');
+            card.className = 'msg-card';
+            card.dataset.from = number;
+            card.dataset.body = (body || '').toLowerCase();
+
+            card.innerHTML = `
+                <div class="msg-avatar ${avatarClass}">${typeIcon}</div>
+                <div class="msg-content">
+                    <div class="msg-header">
+                        <span class="msg-from">${number}</span>
+                        ${badgeLabel ? `<span class="msg-type-badge ${badgeClass}">${badgeLabel}</span>` : ''}
+                        <span class="msg-time">${time}</span>
+                        ${isNew ? '<span class="new-badge">NOVA</span>' : ''}
+                    </div>
+                    <div class="msg-body ${isEmpty ? 'empty' : ''}">${isEmpty ? '(sem texto)' : escapeHtml(body)}</div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function addMessage(data, isNew = false) {
+            emptyState.style.display = 'none';
+            const card = buildCard(data, isNew);
+            container.prepend(card);
+            totalCount++;
+            countEl.textContent = totalCount;
+            applyFilter();
+
+            // Remove "new" badge after 5s
+            if (isNew) {
+                setTimeout(() => {
+                    const badge = card.querySelector('.new-badge');
+                    if (badge) badge.remove();
+                }, 5000);
+            }
+        }
+
+        // Real-time messages
+        socket.on('message', (data) => {
+            if (isPaused) {
+                pendingMessages.push(data);
+                btnPause.textContent = `&#9654; Retomar (${pendingMessages.length})`;
+                return;
+            }
+            addMessage(data, true);
+        });
+
+        // Load history
+        fetch('/api/messages')
+            .then(r => r.json())
+            .then(messages => {
+                if (!messages || messages.length === 0) return;
+                messages.forEach(m => addMessage(m, false));
+            })
+            .catch(() => {});
+
+        // Search / filter
+        function applyFilter() {
+            const q = searchEl.value.toLowerCase().trim();
+            container.querySelectorAll('.msg-card').forEach(card => {
+                if (!q) {
+                    card.classList.remove('filtered-out');
+                    return;
+                }
+                const match = card.dataset.from.includes(q) || card.dataset.body.includes(q);
+                card.classList.toggle('filtered-out', !match);
+            });
+        }
+        searchEl.addEventListener('input', applyFilter);
+
+        // Pause / resume
+        btnPause.addEventListener('click', () => {
+            isPaused = !isPaused;
+            if (!isPaused) {
+                btnPause.classList.remove('paused');
+                btnPause.textContent = '&#9646;&#9646; Pausar';
+                pendingMessages.forEach(m => addMessage(m, true));
+                pendingMessages = [];
+            } else {
+                btnPause.classList.add('paused');
+                btnPause.textContent = '&#9654; Retomar (0)';
+            }
+        });
+
+        // Clear
+        btnClear.addEventListener('click', () => {
+            container.querySelectorAll('.msg-card').forEach(c => c.remove());
+            totalCount = 0;
+            countEl.textContent = 0;
+            emptyState.style.display = '';
+        });
+    </script>
+</body>
+</html>

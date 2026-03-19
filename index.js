@@ -88,6 +88,12 @@ const client = new Client({
 // Arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
+// API: histórico de mensagens recebidas
+app.get('/api/messages', (_req, res) => {
+    const received = (db.logs && db.logs.received) ? db.logs.received : [];
+    res.json(received.slice(-200).reverse());
+});
+
 // Inicializa Banco de Dados Local
 let db = loadDB();
 
@@ -679,7 +685,7 @@ client.on('ready', () => {
 });
 
 client.on('message', async (msg) => {
-    io.emit('message', { from: msg.from, body: msg.body });
+    io.emit('message', { from: msg.from, body: msg.body, type: msg.type, timestamp: new Date().toISOString() });
 
     // Salva mensagem recebida Localmente
     db.logs.received.push({
