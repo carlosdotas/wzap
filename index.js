@@ -84,11 +84,13 @@ const client = new Client({
             '--no-first-run',
             '--disable-gpu',
             '--no-zygote',
+            '--single-process',
             '--disable-software-rasterizer',
             '--disable-extensions',
             '--disable-background-timer-throttling',
             '--disable-backgrounding-occluded-windows',
-            '--disable-renderer-backgrounding'
+            '--disable-renderer-backgrounding',
+            '--disable-features=VizDisplayCompositor',
         ],
     }
 });
