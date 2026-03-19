@@ -75,7 +75,9 @@ const client = new Client({
     puppeteer: {
         headless: 'new',
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome-stable',
-        protocolTimeout: 300000, // 5 min — Cloud Run pode ser lento para iniciar Chrome
+        pipe: true,           // Evita timeout do WS endpoint no Cloud Run
+        timeout: 120000,      // 2min para o Chrome iniciar
+        protocolTimeout: 300000, // 5min para chamadas CDP
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
