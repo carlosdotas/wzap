@@ -20,8 +20,10 @@ function runFfmpeg(args) {
     });
 }
 
-// Garantir que a pasta tmp exista
-const tmpDir = path.join(__dirname, 'tmp');
+// Em produção (Cloud Run), usar /tmp que é garantidamente gravável
+const tmpDir = process.env.NODE_ENV === 'production'
+    ? '/tmp/wwebjs_tmp'
+    : path.join(__dirname, 'tmp');
 if (!fs.existsSync(tmpDir)) {
     fs.mkdirSync(tmpDir, { recursive: true });
 }
@@ -60,10 +62,14 @@ const port = process.env.PORT || 3000;
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
+// Em produção, armazena sessão no /tmp (gravável no Cloud Run)
+const authDataPath = process.env.NODE_ENV === 'production' ? '/tmp' : undefined;
+
 // Configuração do WhatsApp
 const client = new Client({
     authStrategy: new LocalAuth({
-        clientId: "client-one" // Define um ID fixo para a sessão
+        clientId: "client-one",
+        ...(authDataPath && { dataPath: authDataPath })
     }),
     puppeteer: {
         headless: true,
@@ -76,6 +82,7 @@ const client = new Client({
             '--disable-accelerated-2d-canvas',
             '--no-first-run',
             '--disable-gpu',
+            '--no-zygote',
             '--disable-software-rasterizer',
             '--disable-extensions',
             '--disable-background-timer-throttling',
@@ -87,6 +94,11 @@ const client = new Client({
 
 // Arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Health check para Cloud Run
+app.get('/health', (_req, res) => {
+    res.status(200).json({ status: 'ok', whatsapp: whatsappStatus });
+});
 
 // API: histórico de mensagens recebidas
 app.get('/api/messages', (_req, res) => {
@@ -229,8 +241,8 @@ async function transcribeAudio(media, apiKey) {
 
     // 1. Se usar OpenAI (sk-...), Whisper é a melhor escolha para o "Ouvido"
     if (apiKey && apiKey.startsWith('sk-')) {
-        const tempPath = path.join(__dirname, 'tmp', `audio_${Date.now()}.ogg`);
-        const mp3Path = path.join(__dirname, 'tmp', `audio_${Date.now()}.mp3`);
+        const tempPath = path.join(tmpDir, `audio_${Date.now()}.ogg`);
+        const mp3Path = path.join(tmpDir, `audio_${Date.now()}.mp3`);
 
         try {
             console.log(`👂 Usando Whisper. Caminhos: \n- OGG: ${tempPath}\n- MP3: ${mp3Path}`);
@@ -298,8 +310,8 @@ async function transcribeAudio(media, apiKey) {
 }
 
 async function textToSpeech(text, apiKey) {
-    const mp3Path = path.join(__dirname, 'tmp', `tts_${Date.now()}.mp3`);
-    const oggPath = path.join(__dirname, 'tmp', `tts_${Date.now()}.ogg`);
+    const mp3Path = path.join(tmpDir, `tts_${Date.now()}.mp3`);
+    const oggPath = path.join(tmpDir, `tts_${Date.now()}.ogg`);
 
     try {
         const openai = new OpenAI({ apiKey: apiKey });
@@ -801,5 +813,10 @@ client.on('disconnected', (reason) => {
 // Iniciar servidor
 server.listen(port, () => {
     console.log(`Interface rodando em http://localhost:${port}`);
-    client.initialize().catch(err => console.error('Erro ao iniciar cliente WhatsApp:', err));
+    client.initialize().catch(err => {
+        console.error('Erro ao iniciar cliente WhatsApp:', err);
+        whatsappStatus = `Erro ao iniciar: ${err.message}`;
+        io.emit('status', whatsappStatus);
+        io.emit('log', `❌ Falha ao iniciar Chrome/WhatsApp: ${err.message}`);
+    });
 });
