@@ -83,7 +83,7 @@ const client = new Client({
             '--disable-accelerated-2d-canvas',
             '--no-first-run',
             '--disable-gpu',
-            '--single-process',
+            '--no-zygote',
             '--disable-software-rasterizer',
             '--disable-extensions',
             '--disable-background-timer-throttling',
