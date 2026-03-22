@@ -1,0 +1,33 @@
+# Copie este arquivo para terraform.tfvars e preencha com seus valores
+# cp terraform.tfvars.example terraform.tfvars
+
+# ─── OBRIGATÓRIO ───────────────────────────────────────────────
+project_id = "seu-project-id-aqui"
+
+# ─── OPCIONAL (valores padrão são bons para começar) ───────────
+
+# Região (southamerica-east1 = São Paulo)
+region = "southamerica-east1"
+
+# Nome da aplicação
+app_name = "wzap"
+
+# Recursos do Cloud Run (Chrome precisa de bastante memória)
+cloud_run_memory = "2Gi"
+cloud_run_cpu    = "2"
+
+# Instâncias do Cloud Run
+# min=1 mantém a sessão WhatsApp ativa (recomendado)
+cloud_run_min_instances = 1
+cloud_run_max_instances = 1
+
+# VM do servidor VPN (e2-micro é gratuito no free tier)
+vpn_machine_type = "e2-micro"
+
+# Restrinja ao seu IP para segurança!
+# Ex: allowed_ssh_cidrs = ["200.100.50.25/32"]
+allowed_ssh_cidrs = ["0.0.0.0/0"]
+
+# true = dashboard só acessível via VPN
+# false = dashboard público na internet
+restrict_dashboard_to_vpn = false
