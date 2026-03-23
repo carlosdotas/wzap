@@ -548,6 +548,13 @@ resetBtn.addEventListener('click', () => {
     }
 });
 
+const clearSessionBtn = document.getElementById('clear-session-btn');
+clearSessionBtn.addEventListener('click', () => {
+    if (confirm('Isso irá APAGAR a sessão salva e desconectar o WhatsApp.\nVocê precisará escanear o QR Code novamente.\n\nConfirmar?')) {
+        socket.emit('clear-session');
+    }
+});
+
 function addLog(text, type = 'system') {
     const div = document.createElement('div');
     div.classList.add('log-entry', type);

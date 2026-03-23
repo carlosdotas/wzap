@@ -669,6 +669,30 @@ io.on('connection', (socket) => {
             console.error('Erro ao reiniciar:', e);
         }
     });
+
+    socket.on('clear-session', async () => {
+        console.log('Limpando sessão...');
+        whatsappStatus = 'Limpando sessão...';
+        io.emit('status', whatsappStatus);
+        io.emit('log', '🗑️ Limpando sessão do WhatsApp...');
+        try {
+            await client.destroy();
+        } catch (e) {
+            console.error('Erro ao destruir cliente:', e);
+        }
+        // Remove a pasta da sessão salva pelo LocalAuth
+        const sessionPath = path.join(authDataPath || __dirname, '.wwebjs_auth');
+        if (fs.existsSync(sessionPath)) {
+            fs.rmSync(sessionPath, { recursive: true, force: true });
+            console.log('Pasta de sessão removida:', sessionPath);
+        }
+        io.emit('log', '✅ Sessão apagada. Reiniciando para gerar novo QR Code...');
+        whatsappStatus = 'Sessão limpa, reiniciando...';
+        io.emit('status', whatsappStatus);
+        setTimeout(() => {
+            client.initialize();
+        }, 2000);
+    });
 });
 
 // WhatsApp eventos
