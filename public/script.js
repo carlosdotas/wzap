@@ -273,6 +273,11 @@ socket.on('qr', (qr) => {
 // Quando o WhatsApp está pronto
 socket.on('ready', () => {
     addLog('WhatsApp conectado com sucesso!');
+    socket.emit('get-api-config');
+});
+
+socket.on('connect', () => {
+    socket.emit('get-api-config');
 });
 
 // Mensagens recebidas
@@ -393,6 +398,69 @@ clearSessionBtn.addEventListener('click', () => {
         socket.emit('clear-session');
     }
 });
+
+// API & Webhook Tab
+const apiKeyDisplay = document.getElementById('api-key-display');
+const copyApiKeyBtn = document.getElementById('copy-api-key');
+const regenApiKeyBtn = document.getElementById('regen-api-key');
+const webhookUrlInput = document.getElementById('webhook-url');
+const webhookSecretInput = document.getElementById('webhook-secret');
+const saveWebhookBtn = document.getElementById('save-webhook-btn');
+const testWebhookBtn = document.getElementById('test-webhook-btn');
+
+socket.on('api-key', (key) => {
+    if (apiKeyDisplay) apiKeyDisplay.value = key;
+});
+
+socket.on('webhook-config', (data) => {
+    if (webhookUrlInput) webhookUrlInput.value = data.url || '';
+    if (webhookSecretInput) webhookSecretInput.placeholder = data.hasSecret ? '(secret salvo)' : 'Token enviado no header X-Webhook-Secret';
+});
+
+// Request config when API tab is opened
+document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
+    if (btn.dataset.tab === 'api') {
+        btn.addEventListener('click', () => socket.emit('get-api-config'));
+    }
+});
+
+if (copyApiKeyBtn) {
+    copyApiKeyBtn.addEventListener('click', () => {
+        if (apiKeyDisplay?.value) {
+            navigator.clipboard.writeText(apiKeyDisplay.value).then(() => {
+                copyApiKeyBtn.textContent = '✓ Copiado';
+                setTimeout(() => { copyApiKeyBtn.textContent = 'Copiar'; }, 2000);
+            });
+        }
+    });
+}
+
+if (regenApiKeyBtn) {
+    regenApiKeyBtn.addEventListener('click', () => {
+        if (confirm('Gerar uma nova chave irá invalidar a atual. Confirmar?')) {
+            socket.emit('regenerate-api-key');
+        }
+    });
+}
+
+if (saveWebhookBtn) {
+    saveWebhookBtn.addEventListener('click', () => {
+        const url = webhookUrlInput?.value.trim();
+        const secret = webhookSecretInput?.value.trim();
+        if (url && !url.startsWith('http')) {
+            alert('URL inválida. Deve começar com http:// ou https://');
+            return;
+        }
+        socket.emit('save-webhook', { url, secret });
+        addLog(`🔗 Webhook salvo: ${url || '(removido)'}`);
+    });
+}
+
+if (testWebhookBtn) {
+    testWebhookBtn.addEventListener('click', () => {
+        socket.emit('test-webhook');
+    });
+}
 
 function addLog(text, type = 'system') {
     const div = document.createElement('div');

@@ -38,6 +38,7 @@
                         <button class="tab-btn" data-tab="bulk">Em Massa (Seguro)</button>
                         <button class="tab-btn" data-tab="schedule">Agendar</button>
                             <button class="tab-btn" data-tab="status">Status</button>
+                        <button class="tab-btn" data-tab="api">API & Webhook</button>
                     </div>
                     <div class="tabs-right">
                         <button id="clear-session-btn" class="danger mini">🗑️ Limpar Sessão</button>
@@ -154,6 +155,54 @@
                             <button id="send-status-btn">Postar no Status</button>
                             <canvas id="status-canvas" width="1080" height="1920" style="display:none;"></canvas>
 
+                        </div>
+
+                        <div id="api-tab" class="tab-content hidden">
+                            <div class="card-inner">
+                                <div class="flex-between">
+                                    <h3>Chave de API</h3>
+                                    <a href="/api-docs" target="_blank" class="btn-logout">Swagger UI →</a>
+                                </div>
+                                <p style="color:#94a3b8;font-size:.85rem;margin-bottom:.75rem;">Use o header <code style="background:#0f172a;padding:2px 6px;border-radius:4px;color:#10b981">X-API-Key</code> nas requisições à API.</p>
+                                <div class="api-key-row">
+                                    <input type="text" id="api-key-display" readonly placeholder="Carregando...">
+                                    <button id="copy-api-key" class="secondary mini">Copiar</button>
+                                    <button id="regen-api-key" class="danger mini">Gerar Nova</button>
+                                </div>
+                            </div>
+
+                            <div class="card-inner" style="margin-top:1.5rem">
+                                <h3>Configurar Webhook</h3>
+                                <p style="color:#94a3b8;font-size:.85rem;margin-bottom:.75rem;">Quando uma mensagem for recebida, o bot fará um <strong>POST</strong> para esta URL com o conteúdo da mensagem (incluindo mídia em base64).</p>
+                                <div class="input-group">
+                                    <label for="webhook-url">URL do Webhook</label>
+                                    <input type="text" id="webhook-url" placeholder="https://meuservidor.com/webhook">
+                                </div>
+                                <div class="input-group">
+                                    <label for="webhook-secret">Secret (opcional)</label>
+                                    <input type="password" id="webhook-secret" placeholder="Token enviado no header X-Webhook-Secret">
+                                </div>
+                                <div class="api-key-row" style="margin-top:.75rem">
+                                    <button id="save-webhook-btn">Salvar Webhook</button>
+                                    <button id="test-webhook-btn" class="secondary">Testar</button>
+                                </div>
+                            </div>
+
+                            <div class="card-inner" style="margin-top:1.5rem">
+                                <h3>Payload recebido via Webhook</h3>
+                                <pre class="code-block">{
+  "event": "message_received",
+  "timestamp": "2024-01-01T12:00:00.000Z",
+  "data": {
+    "from": "5511999999999@c.us",
+    "fromName": "Nome do Contato",
+    "body": "Texto da mensagem",
+    "type": "chat",
+    "hasMedia": false,
+    "media": null
+  }
+}</pre>
+                            </div>
                         </div>
                     </div>
 

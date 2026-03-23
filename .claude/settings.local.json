@@ -26,7 +26,10 @@
       "Bash(grep -v \"^$\")",
       "Bash(railway --version)",
       "Bash(gcloud compute:*)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://34.39.219.177/)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://34.39.219.177/)",
+      "Read(//c/Users/windows/.ssh/**)",
+      "Bash(git config:*)",
+      "Bash(ssh -i ~/.ssh/google_compute_engine -o StrictHostKeyChecking=no carlosdotas@34.39.219.177 \"cd /opt/whasapp && git pull origin main && pm2 restart whasapp && pm2 status\")"
     ]
   }
 }

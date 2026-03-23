@@ -522,3 +522,33 @@ button.danger.mini {
 .hidden {
     display: none;
 }
+
+.api-key-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.api-key-row input {
+    flex: 1;
+    font-family: monospace;
+    font-size: 0.85rem;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    color: #10b981;
+}
+
+.code-block {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 0;
+    line-height: 1.6;
+}

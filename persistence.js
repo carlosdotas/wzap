@@ -7,7 +7,7 @@ const DB_FILE = path.join(dataDir, 'db.json');
 const defaultData = {
     scheduledMessages: [],
     aiSettings: { active: false, prompt: '', apiKey: '' },
-    users: {}, // Local data for users (like aiEnabled)
+    users: {},
     logs: {
         sent: [],
         received: []
@@ -21,7 +21,9 @@ const defaultData = {
         endTime: "22:00",
         type: "text",
         logs: []
-    }
+    },
+    apiKey: '',
+    webhook: { url: '', secret: '' }
 };
 
 function loadDB() {

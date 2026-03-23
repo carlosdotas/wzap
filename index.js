@@ -10,6 +10,7 @@ const fs = require('fs');
 const { execFile } = require('child_process');
 const ffmpegPath = require('ffmpeg-static');
 const axios = require('axios');
+const crypto = require('crypto');
 
 function runFfmpeg(args) {
     return new Promise((resolve, reject) => {
@@ -171,22 +172,297 @@ app.get('/logout', (_req, res) => {
     res.redirect('/login');
 });
 
+// Generate API key if not in DB
+function ensureApiKey() {
+    if (!db.apiKey) {
+        db.apiKey = crypto.randomUUID();
+        saveDB(db);
+    }
+}
+
+// API key middleware
+function requireApiKey(req, res, next) {
+    const key = req.headers['x-api-key'];
+    if (!key || key !== db.apiKey) {
+        return res.status(401).json({ error: 'API key inválida ou ausente. Use o header X-API-Key.' });
+    }
+    next();
+}
+
+// Webhook sender
+async function sendWebhook(payload) {
+    const webhookUrl = db.webhook?.url;
+    if (!webhookUrl) return;
+    try {
+        const headers = { 'Content-Type': 'application/json' };
+        if (db.webhook?.secret) headers['X-Webhook-Secret'] = db.webhook.secret;
+        await axios.post(webhookUrl, payload, { headers, timeout: 8000 });
+        console.log('Webhook enviado:', payload.event);
+    } catch (err) {
+        console.error('Erro ao enviar webhook:', err.message);
+        io.emit('log', `⚠️ Webhook falhou: ${err.message}`);
+    }
+}
+
+// Swagger spec
+const swaggerSpec = {
+    openapi: '3.0.0',
+    info: {
+        title: 'WhatsApp Bot API',
+        version: '1.0.0',
+        description: 'API REST para envio de mensagens e configuração de webhook via WhatsApp Web.\n\nObs: Use a **chave de API** gerada no painel administrativo no header `X-API-Key`.'
+    },
+    servers: [{ url: '/', description: 'Servidor atual' }],
+    components: {
+        securitySchemes: {
+            ApiKeyAuth: {
+                type: 'apiKey',
+                in: 'header',
+                name: 'X-API-Key',
+                description: 'Chave gerada no painel /admin'
+            }
+        },
+        schemas: {
+            SendMessageRequest: {
+                type: 'object',
+                required: ['number', 'message'],
+                properties: {
+                    number: { type: 'string', example: '5511999999999', description: 'Número com DDI e DDD, sem +' },
+                    message: { type: 'string', example: 'Olá! Como posso ajudar?', description: 'Texto da mensagem' }
+                }
+            },
+            SendMediaRequest: {
+                type: 'object',
+                required: ['number', 'mimetype'],
+                properties: {
+                    number: { type: 'string', example: '5511999999999' },
+                    url: { type: 'string', example: 'https://example.com/imagem.jpg', description: 'URL pública da mídia (use url OU base64)' },
+                    base64: { type: 'string', description: 'Conteúdo da mídia em Base64 (sem prefixo data:...)' },
+                    mimetype: { type: 'string', example: 'image/jpeg', description: 'MIME type da mídia' },
+                    filename: { type: 'string', example: 'foto.jpg' },
+                    caption: { type: 'string', example: 'Veja nossa promoção!' }
+                }
+            },
+            WebhookConfig: {
+                type: 'object',
+                properties: {
+                    url: { type: 'string', example: 'https://meuservidor.com/webhook', description: 'URL para receber eventos do WhatsApp' },
+                    secret: { type: 'string', example: 'token-secreto', description: 'Enviado no header X-Webhook-Secret para validação' }
+                }
+            },
+            SuccessResponse: {
+                type: 'object',
+                properties: {
+                    success: { type: 'boolean', example: true },
+                    to: { type: 'string', example: '5511999999999@c.us' }
+                }
+            },
+            StatusResponse: {
+                type: 'object',
+                properties: {
+                    status: { type: 'string', example: 'Conectado' },
+                    connected: { type: 'boolean', example: true }
+                }
+            },
+            ErrorResponse: {
+                type: 'object',
+                properties: {
+                    error: { type: 'string' }
+                }
+            }
+        }
+    },
+    security: [{ ApiKeyAuth: [] }],
+    paths: {
+        '/api/status': {
+            get: {
+                tags: ['Sistema'],
+                summary: 'Status da conexão WhatsApp',
+                description: 'Retorna o status atual da conexão com o WhatsApp.',
+                responses: {
+                    200: { description: 'Status retornado', content: { 'application/json': { schema: { $ref: '#/components/schemas/StatusResponse' } } } },
+                    401: { description: 'API key inválida', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+                }
+            }
+        },
+        '/api/send': {
+            post: {
+                tags: ['Mensagens'],
+                summary: 'Enviar mensagem de texto',
+                description: 'Envia uma mensagem de texto para um número do WhatsApp.',
+                requestBody: {
+                    required: true,
+                    content: { 'application/json': { schema: { $ref: '#/components/schemas/SendMessageRequest' } } }
+                },
+                responses: {
+                    200: { description: 'Mensagem enviada com sucesso', content: { 'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } } } },
+                    400: { description: 'Parâmetros inválidos' },
+                    503: { description: 'WhatsApp não conectado' }
+                }
+            }
+        },
+        '/api/send-media': {
+            post: {
+                tags: ['Mensagens'],
+                summary: 'Enviar mídia (imagem, vídeo, documento, áudio)',
+                description: 'Envia um arquivo de mídia via URL pública ou Base64.',
+                requestBody: {
+                    required: true,
+                    content: { 'application/json': { schema: { $ref: '#/components/schemas/SendMediaRequest' } } }
+                },
+                responses: {
+                    200: { description: 'Mídia enviada com sucesso' },
+                    400: { description: 'Parâmetros inválidos' },
+                    503: { description: 'WhatsApp não conectado' }
+                }
+            }
+        },
+        '/api/webhook': {
+            get: {
+                tags: ['Webhook'],
+                summary: 'Obter configuração do webhook',
+                responses: {
+                    200: { description: 'Configuração atual', content: { 'application/json': { schema: { $ref: '#/components/schemas/WebhookConfig' } } } }
+                }
+            },
+            post: {
+                tags: ['Webhook'],
+                summary: 'Configurar URL do webhook',
+                description: 'Define a URL para onde os eventos de mensagens recebidas serão enviados.',
+                requestBody: {
+                    required: true,
+                    content: { 'application/json': { schema: { $ref: '#/components/schemas/WebhookConfig' } } }
+                },
+                responses: {
+                    200: { description: 'Webhook configurado com sucesso' }
+                }
+            }
+        },
+        '/api/apikey/regenerate': {
+            post: {
+                tags: ['Sistema'],
+                summary: 'Gerar nova chave de API',
+                description: 'Gera uma nova chave de API. A chave anterior será invalidada imediatamente.',
+                responses: {
+                    200: { description: 'Nova chave gerada', content: { 'application/json': { schema: { type: 'object', properties: { apiKey: { type: 'string' } } } } } }
+                }
+            }
+        }
+    }
+};
+
+// Swagger UI (via CDN)
+app.get('/api-docs', requireAuth, (_req, res) => {
+    res.send(`<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>WhatsApp API - Docs</title>
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
+  <style>body{margin:0} .topbar{display:none}</style>
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+  <script>
+    SwaggerUIBundle({
+      spec: ${JSON.stringify(swaggerSpec)},
+      dom_id: '#swagger-ui',
+      presets: [SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset],
+      layout: 'BaseLayout',
+      deepLinking: true
+    });
+  </script>
+</body>
+</html>`);
+});
+
 // Arquivos estáticos (protegidos)
 app.use(requireAuth, express.static(path.join(__dirname, 'public')));
+
+// REST API routes
+app.get('/api/status', requireApiKey, (req, res) => {
+    res.json({ status: whatsappStatus, connected: whatsappStatus === 'Conectado' });
+});
+
+app.post('/api/send', requireApiKey, async (req, res) => {
+    const { number, message } = req.body;
+    if (!number || !message) return res.status(400).json({ error: 'number e message são obrigatórios' });
+    if (whatsappStatus !== 'Conectado') return res.status(503).json({ error: 'WhatsApp não conectado', status: whatsappStatus });
+    try {
+        const chatId = number.includes('@') ? number : `${normalizePhone(number)}@c.us`;
+        await client.sendMessage(chatId, message);
+        io.emit('log', `📤 API: mensagem enviada para ${number}`);
+        db.logs.sent.push({ to: chatId, message, type: 'api', timestamp: new Date().toISOString() });
+        saveDB(db);
+        res.json({ success: true, to: chatId });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/send-media', requireApiKey, async (req, res) => {
+    const { number, url, base64, mimetype, filename, caption } = req.body;
+    if (!number || (!url && !base64) || !mimetype) {
+        return res.status(400).json({ error: 'number, mimetype e (url ou base64) são obrigatórios' });
+    }
+    if (whatsappStatus !== 'Conectado') return res.status(503).json({ error: 'WhatsApp não conectado' });
+    try {
+        const chatId = number.includes('@') ? number : `${normalizePhone(number)}@c.us`;
+        let media;
+        if (url) {
+            media = await MessageMedia.fromUrl(url, { unsafeMime: true });
+        } else {
+            media = new MessageMedia(mimetype, base64, filename || 'media');
+        }
+        await client.sendMessage(chatId, media, { caption: caption || '' });
+        io.emit('log', `📤 API: mídia (${mimetype}) enviada para ${number}`);
+        db.logs.sent.push({ to: chatId, message: caption || `[mídia: ${mimetype}]`, type: 'api_media', timestamp: new Date().toISOString() });
+        saveDB(db);
+        res.json({ success: true, to: chatId });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/webhook', requireApiKey, (req, res) => {
+    res.json({ url: db.webhook?.url || '', secret: db.webhook?.secret ? '***' : '' });
+});
+
+app.post('/api/webhook', requireApiKey, (req, res) => {
+    const { url, secret } = req.body;
+    db.webhook = { url: url || '', secret: secret || '' };
+    saveDB(db);
+    io.emit('webhook-config', { url: db.webhook.url, hasSecret: !!db.webhook.secret });
+    io.emit('log', `🔗 Webhook configurado: ${url}`);
+    res.json({ success: true });
+});
+
+app.post('/api/apikey/regenerate', requireApiKey, (req, res) => {
+    db.apiKey = crypto.randomUUID();
+    saveDB(db);
+    io.emit('api-key', db.apiKey);
+    res.json({ apiKey: db.apiKey });
+});
+
+app.get('/api/messages', requireApiKey, (_req, res) => {
+    const received = (db.logs && db.logs.received) ? db.logs.received : [];
+    res.json(received.slice(-200).reverse());
+});
 
 // Health check para Cloud Run
 app.get('/health', (_req, res) => {
     res.status(200).json({ status: 'ok', whatsapp: whatsappStatus });
 });
 
-// API: histórico de mensagens recebidas
-app.get('/api/messages', (_req, res) => {
-    const received = (db.logs && db.logs.received) ? db.logs.received : [];
-    res.json(received.slice(-200).reverse());
-});
-
 // Inicializa Banco de Dados Local
 let db = loadDB();
+// Garante que existe API key
+if (!db.apiKey) {
+    db.apiKey = crypto.randomUUID();
+    if (!db.webhook) db.webhook = { url: '', secret: '' };
+    saveDB(db);
+}
 
 // Estado do sistema (Sincronizado com DB Local)
 let whatsappStatus = 'Iniciando...';
@@ -764,6 +1040,44 @@ io.on('connection', (socket) => {
             client.initialize();
         }, 2000);
     });
+
+    socket.on('get-api-config', () => {
+        socket.emit('api-key', db.apiKey);
+        socket.emit('webhook-config', { url: db.webhook?.url || '', hasSecret: !!(db.webhook?.secret) });
+    });
+
+    socket.on('save-webhook', (data) => {
+        db.webhook = { url: data.url || '', secret: data.secret || '' };
+        saveDB(db);
+        io.emit('webhook-config', { url: db.webhook.url, hasSecret: !!db.webhook.secret });
+        io.emit('log', `🔗 Webhook salvo: ${data.url}`);
+    });
+
+    socket.on('regenerate-api-key', () => {
+        db.apiKey = crypto.randomUUID();
+        saveDB(db);
+        io.emit('api-key', db.apiKey);
+        io.emit('log', '🔑 Nova chave de API gerada.');
+    });
+
+    socket.on('test-webhook', async () => {
+        if (!db.webhook?.url) {
+            socket.emit('log', '⚠️ Configure uma URL de webhook primeiro.');
+            return;
+        }
+        try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (db.webhook.secret) headers['X-Webhook-Secret'] = db.webhook.secret;
+            await axios.post(db.webhook.url, {
+                event: 'test',
+                timestamp: new Date().toISOString(),
+                data: { message: 'Teste de webhook do WhatsApp Bot' }
+            }, { headers, timeout: 8000 });
+            socket.emit('log', '✅ Webhook testado com sucesso!');
+        } catch (err) {
+            socket.emit('log', `❌ Falha no teste de webhook: ${err.message}`);
+        }
+    });
 });
 
 // WhatsApp eventos
@@ -809,6 +1123,36 @@ client.on('message', async (msg) => {
         timestamp: new Date().toISOString()
     });
     saveDB(db);
+
+    // Webhook forwarding
+    if (db.webhook?.url) {
+        (async () => {
+            try {
+                let mediaPayload = null;
+                if (msg.hasMedia) {
+                    const media = await msg.downloadMedia().catch(() => null);
+                    if (media) {
+                        mediaPayload = { data: media.data, mimetype: media.mimetype, filename: media.filename || null };
+                    }
+                }
+                const contact = await msg.getContact().catch(() => ({}));
+                sendWebhook({
+                    event: 'message_received',
+                    timestamp: new Date().toISOString(),
+                    data: {
+                        from: msg.from,
+                        fromName: contact.pushname || contact.name || '',
+                        body: msg.body || '',
+                        type: msg.type,
+                        hasMedia: msg.hasMedia,
+                        media: mediaPayload
+                    }
+                });
+            } catch (e) {
+                console.error('Webhook error:', e.message);
+            }
+        })();
+    }
 
     // Lógica de Resposta Automática IA
     if (aiSettings.active) {
@@ -910,7 +1254,13 @@ client.on('disconnected', (reason) => {
     console.log('WhatsApp desconectado:', reason);
     whatsappStatus = 'Desconectado';
     io.emit('status', whatsappStatus);
-    client.initialize().catch(err => console.error('Erro ao reconectar:', err));
+    io.emit('log', `⚠️ WhatsApp desconectado: ${reason}. Reconectando em 10s...`);
+    setTimeout(() => {
+        client.initialize().catch(err => {
+            console.error('Erro ao reconectar:', err);
+            io.emit('log', `❌ Falha ao reconectar: ${err.message}`);
+        });
+    }, 10000);
 });
 
 // Iniciar servidor
