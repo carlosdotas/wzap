@@ -30,16 +30,6 @@ const statusBgColor = document.getElementById('status-bg-color');
 const statusTextColor = document.getElementById('status-text-color');
 const statusFont = document.getElementById('status-font');
 
-// Auto Status Elements
-const autoStatusActive = document.getElementById('auto-status-active');
-const autoStatusType = document.getElementById('auto-status-type');
-const autoStatusPrompt = document.getElementById('auto-status-prompt');
-const autoStatusThemes = document.getElementById('auto-status-themes');
-const autoStatusInterval = document.getElementById('auto-status-interval');
-const autoStatusStart = document.getElementById('auto-status-start');
-const autoStatusEnd = document.getElementById('auto-status-end');
-const saveAutoStatusBtn = document.getElementById('save-auto-status');
-const autoStatusList = document.getElementById('auto-status-list');
 
 // Schedule Elements
 const schedulePhoneInput = document.getElementById('schedule-phone');
@@ -430,48 +420,6 @@ saveAiBtn.addEventListener('click', () => {
     socket.emit('save-ai-settings', data);
 });
 
-// Auto Status Sync & Save
-socket.on('auto-status-settings', (data) => {
-    if (data.active !== undefined) autoStatusActive.value = data.active.toString();
-    if (data.type !== undefined) autoStatusType.value = data.type;
-    if (data.prompt !== undefined) autoStatusPrompt.value = data.prompt;
-    if (data.themes !== undefined) autoStatusThemes.value = data.themes;
-    if (data.interval !== undefined) autoStatusInterval.value = data.interval;
-    if (data.startTime !== undefined) autoStatusStart.value = data.startTime;
-    if (data.endTime !== undefined) autoStatusEnd.value = data.endTime;
-});
-
-socket.on('auto-status-logs', (logs) => {
-    renderAutoStatusLogs(logs);
-});
-
-saveAutoStatusBtn.addEventListener('click', () => {
-    const data = {
-        active: autoStatusActive.value === 'true',
-        type: autoStatusType.value,
-        prompt: autoStatusPrompt.value.trim(),
-        themes: autoStatusThemes.value.trim(),
-        interval: parseInt(autoStatusInterval.value),
-        startTime: autoStatusStart.value,
-        endTime: autoStatusEnd.value
-    };
-    socket.emit('save-auto-status', data);
-});
-
-function renderAutoStatusLogs(logs) {
-    autoStatusList.innerHTML = '';
-    if (!logs) return;
-    const reversedLogs = [...logs].reverse();
-    reversedLogs.forEach(log => {
-        const div = document.createElement('div');
-        div.className = 'scheduled-item sent';
-        div.innerHTML = `
-            <div class="content"><strong>${log.type === 'image' ? '🖼️ Imagem' : '📄 Texto'}:</strong> ${log.content}</div>
-            <div class="time">${new Date(log.timestamp).toLocaleString()}</div>
-        `;
-        autoStatusList.appendChild(div);
-    });
-}
 
 // Update AI Selection List UI
 function renderAiSelectionList(list) {

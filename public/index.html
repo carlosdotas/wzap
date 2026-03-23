@@ -228,60 +228,6 @@
                             <button id="send-status-btn">Postar no Status</button>
                             <canvas id="status-canvas" width="1080" height="1920" style="display:none;"></canvas>
 
-                            <div class="card-inner" style="margin-top: 2rem;">
-                                <div class="flex-between">
-                                    <h3>Status Automático (IA)</h3>
-                                </div>
-                                <div class="input-row">
-                                    <div class="input-group">
-                                        <label>Ativar Automação?</label>
-                                        <select id="auto-status-active">
-                                            <option value="false">Não</option>
-                                            <option value="true">Sim</option>
-                                        </select>
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Tipo de Status</label>
-                                        <select id="auto-status-type">
-                                            <option value="text">Apenas Texto</option>
-                                            <option value="image">Imagem IA + Legenda</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="input-group">
-                                    <label>Temas para Pesquisa (Trends)</label>
-                                    <input type="text" id="auto-status-themes"
-                                        placeholder="Ex: Tecnologia, Moda, Notícias (Separados por vírgula)">
-                                </div>
-                                <div class="input-group">
-                                    <label>Prompt para Geração (IA)</label>
-                                    <textarea id="auto-status-prompt" rows="2"
-                                        placeholder="Ex: Crie uma frase motivacional curta sobre o mercado atual..."></textarea>
-                                </div>
-                                <div class="input-row">
-                                    <div class="input-group">
-                                        <label>Intervalo (Minutos)</label>
-                                        <input type="number" id="auto-status-interval" value="60" min="15">
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Hora Início</label>
-                                        <input type="time" id="auto-status-start" value="08:00">
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Hora Término</label>
-                                        <input type="time" id="auto-status-end" value="22:00">
-                                    </div>
-                                </div>
-                                <button id="save-auto-status" class="secondary">Salvar Automação de Status</button>
-
-                                <div class="history-list card-inner"
-                                    style="margin-top: 1.5rem; border-top: 1px dashed #334155;">
-                                    <h3>Histórico de Posts Automáticos</h3>
-                                    <div id="auto-status-list" class="mini-list" style="max-height: 200px;">
-                                        <!-- Logs de status automático serão injetados aqui -->
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
