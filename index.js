@@ -388,20 +388,154 @@ app.get('/api-docs', requireAuth, (_req, res) => {
   <meta charset="UTF-8">
   <title>WhatsApp API - Docs</title>
   <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
-  <style>body{margin:0} .topbar{display:none}</style>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Outfit',sans-serif;background:#0f172a;color:#f8fafc}
+    .topbar{display:none}
+    /* Instructions section */
+    .ai-instructions{max-width:1200px;margin:0 auto;padding:2rem 2rem 0}
+    .ai-instructions h1{font-size:1.6rem;margin-bottom:.25rem}
+    .ai-instructions h1 span{color:#10b981}
+    .ai-instructions .subtitle{color:#94a3b8;font-size:.95rem;margin-bottom:1.5rem}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem}
+    .card{background:#1e293b;border-radius:1rem;padding:1.25rem}
+    .card h3{font-size:.9rem;color:#10b981;margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.05em}
+    .card p,.card li{font-size:.85rem;color:#94a3b8;line-height:1.7}
+    .card ul{padding-left:1.1rem}
+    .card li{margin-bottom:.2rem}
+    .card code,.inline-code{background:#0f172a;color:#10b981;padding:2px 7px;border-radius:4px;font-family:monospace;font-size:.8rem}
+    .endpoint-list{display:flex;flex-direction:column;gap:.5rem}
+    .endpoint{display:flex;align-items:center;gap:.6rem;font-size:.82rem}
+    .method{font-weight:600;font-size:.72rem;padding:2px 7px;border-radius:4px;min-width:44px;text-align:center}
+    .method.post{background:#0d3b2e;color:#10b981}
+    .method.get{background:#1e3a5f;color:#60a5fa}
+    .endpoint-path{color:#f8fafc;font-family:monospace}
+    .endpoint-desc{color:#94a3b8}
+    .code-example{background:#0f172a;border:1px solid #1e293b;border-radius:.75rem;padding:1rem;font-family:monospace;font-size:.78rem;color:#94a3b8;overflow-x:auto;white-space:pre;line-height:1.7}
+    .code-example .hl{color:#10b981}
+    .code-example .str{color:#f59e0b}
+    .badge{display:inline-block;background:#0d3b2e;color:#10b981;border-radius:4px;padding:1px 8px;font-size:.75rem;margin-left:.4rem}
+    .divider{border:none;border-top:1px solid #1e293b;margin:1.5rem 0}
+    #swagger-ui{max-width:1200px;margin:0 auto;padding:0 1rem 2rem}
+    .swagger-ui .info{display:none}
+    .swagger-ui .scheme-container{background:#1e293b!important;padding:.75rem 1rem}
+  </style>
 </head>
 <body>
-  <div id="swagger-ui"></div>
-  <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
-  <script>
-    SwaggerUIBundle({
-      spec: ${JSON.stringify(swaggerSpec)},
-      dom_id: '#swagger-ui',
-      presets: [SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset],
-      layout: 'BaseLayout',
-      deepLinking: true
-    });
-  </script>
+
+<div class="ai-instructions">
+  <h1>WhatsApp <span>Bot API</span> <span class="badge">v1.0</span></h1>
+  <p class="subtitle">API REST para envio de mensagens, mídias e status via WhatsApp. Integre com agentes de IA, automações e sistemas externos.</p>
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>Autenticação</h3>
+      <p>Todas as requisições devem incluir o header:</p>
+      <p style="margin:.6rem 0"><code>X-API-Key: sua-chave-aqui</code></p>
+      <p>A chave é gerada e exibida na aba <strong>API &amp; Webhook</strong> do painel administrativo em <code>/</code>.</p>
+    </div>
+
+    <div class="card">
+      <h3>Endpoints disponíveis</h3>
+      <div class="endpoint-list">
+        <div class="endpoint"><span class="method get">GET</span><span class="endpoint-path">/api/status</span></div>
+        <div class="endpoint"><span class="method post">POST</span><span class="endpoint-path">/api/send</span><span class="endpoint-desc">— texto</span></div>
+        <div class="endpoint"><span class="method post">POST</span><span class="endpoint-path">/api/send-media</span><span class="endpoint-desc">— imagem/vídeo/doc</span></div>
+        <div class="endpoint"><span class="method post">POST</span><span class="endpoint-path">/api/send-status</span><span class="endpoint-desc">— status WhatsApp</span></div>
+        <div class="endpoint"><span class="method get">GET</span><span class="endpoint-path">/api/webhook</span></div>
+        <div class="endpoint"><span class="method post">POST</span><span class="endpoint-path">/api/webhook</span><span class="endpoint-desc">— configurar</span></div>
+        <div class="endpoint"><span class="method get">GET</span><span class="endpoint-path">/api/messages</span><span class="endpoint-desc">— histórico</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Enviar mensagem de texto</h3>
+      <div class="code-example"><span class="hl">POST</span> /api/send
+Content-Type: application/json
+X-API-Key: <span class="str">sua-chave</span>
+
+{
+  <span class="hl">"number"</span>: <span class="str">"5511999999999"</span>,
+  <span class="hl">"message"</span>: <span class="str">"Olá! Como posso ajudar?"</span>
+}</div>
+    </div>
+
+    <div class="card">
+      <h3>Enviar mídia por URL</h3>
+      <div class="code-example"><span class="hl">POST</span> /api/send-media
+X-API-Key: <span class="str">sua-chave</span>
+
+{
+  <span class="hl">"number"</span>: <span class="str">"5511999999999"</span>,
+  <span class="hl">"url"</span>: <span class="str">"https://exemplo.com/img.jpg"</span>,
+  <span class="hl">"mimetype"</span>: <span class="str">"image/jpeg"</span>,
+  <span class="hl">"caption"</span>: <span class="str">"Confira nossa promoção!"</span>
+}</div>
+    </div>
+
+    <div class="card">
+      <h3>Postar no Status</h3>
+      <div class="code-example"><span class="hl">POST</span> /api/send-status
+X-API-Key: <span class="str">sua-chave</span>
+
+<span class="hl">// Texto simples</span>
+{ <span class="hl">"message"</span>: <span class="str">"Bom dia! 🌅"</span> }
+
+<span class="hl">// Imagem com legenda</span>
+{
+  <span class="hl">"url"</span>: <span class="str">"https://exemplo.com/img.jpg"</span>,
+  <span class="hl">"mimetype"</span>: <span class="str">"image/jpeg"</span>,
+  <span class="hl">"message"</span>: <span class="str">"Confira!"</span>
+}</div>
+    </div>
+
+    <div class="card">
+      <h3>Webhook — payload recebido</h3>
+      <p style="margin-bottom:.6rem">Configure a URL no painel. Ao receber mensagem, o bot faz <code>POST</code> com:</p>
+      <div class="code-example">{
+  <span class="hl">"event"</span>: <span class="str">"message_received"</span>,
+  <span class="hl">"timestamp"</span>: <span class="str">"2024-01-01T12:00:00Z"</span>,
+  <span class="hl">"data"</span>: {
+    <span class="hl">"from"</span>: <span class="str">"5511999999999@c.us"</span>,
+    <span class="hl">"fromName"</span>: <span class="str">"Nome"</span>,
+    <span class="hl">"body"</span>: <span class="str">"texto"</span>,
+    <span class="hl">"type"</span>: <span class="str">"chat"</span>,
+    <span class="hl">"hasMedia"</span>: false,
+    <span class="hl">"media"</span>: null
+  }
+}</div>
+    </div>
+
+    <div class="card">
+      <h3>Instruções para agentes de IA</h3>
+      <ul>
+        <li>Use <code>GET /api/status</code> antes de enviar para verificar conexão</li>
+        <li>Números devem incluir DDI+DDD sem <code>+</code> (ex: <code>5511999999999</code>)</li>
+        <li>Mídias podem ser enviadas por <code>url</code> (preferido) ou <code>base64</code></li>
+        <li>O header <code>X-Webhook-Secret</code> permite validar origem do evento</li>
+        <li>Respostas de erro retornam <code>{"error": "mensagem"}</code></li>
+        <li>Status HTTP: <code>200</code> sucesso · <code>400</code> params · <code>401</code> auth · <code>503</code> desconectado</li>
+      </ul>
+    </div>
+
+  </div>
+  <hr class="divider">
+  <p style="color:#475569;font-size:.8rem;margin-bottom:1rem">Referência completa dos endpoints abaixo — clique em um endpoint para expandir e testar.</p>
+</div>
+
+<div id="swagger-ui"></div>
+<script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+<script>
+  SwaggerUIBundle({
+    spec: ${JSON.stringify(swaggerSpec)},
+    dom_id: '#swagger-ui',
+    presets: [SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset],
+    layout: 'BaseLayout',
+    deepLinking: true
+  });
+</script>
 </body>
 </html>`);
 });
