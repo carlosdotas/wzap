@@ -27,18 +27,23 @@
                 </div>
                 <div class="actions">
                     <button id="reset-btn" class="secondary">Reiniciar Conexão</button>
-                    <button id="clear-session-btn" class="danger">Limpar Sessão</button>
                 </div>
                 <p class="hint">Escaneie o código com seu WhatsApp para conectar.</p>
             </section>
 
             <section id="control-section" class="card hidden">
-                <div class="tabs">
-                    <button class="tab-btn active" data-tab="single">Individual</button>
-                    <button class="tab-btn" data-tab="bulk">Em Massa (Seguro)</button>
-                    <button class="tab-btn" data-tab="schedule">Agendar</button>
-                    <button class="tab-btn" data-tab="ai">IA Responder</button>
-                    <button class="tab-btn" data-tab="status">Status</button>
+                <div class="tabs tabs-with-actions">
+                    <div class="tabs-left">
+                        <button class="tab-btn active" data-tab="single">Individual</button>
+                        <button class="tab-btn" data-tab="bulk">Em Massa (Seguro)</button>
+                        <button class="tab-btn" data-tab="schedule">Agendar</button>
+                        <button class="tab-btn" data-tab="ai">IA Responder</button>
+                        <button class="tab-btn" data-tab="status">Status</button>
+                    </div>
+                    <div class="tabs-right">
+                        <button id="clear-session-btn" class="danger mini">🗑️ Limpar Sessão</button>
+                        <a href="/logout" class="btn-logout">Sair</a>
+                    </div>
                 </div>
 
                 <div class="control-layout">

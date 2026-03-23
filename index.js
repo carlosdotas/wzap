@@ -100,8 +100,79 @@ const client = new Client({
     }
 });
 
-// Arquivos estáticos
-app.use(express.static(path.join(__dirname, 'public')));
+// Login credentials
+const AUTH_USER = 'admin';
+const AUTH_PASS = '821332';
+
+// Auth middleware
+function requireAuth(req, res, next) {
+    const cookie = req.headers.cookie || '';
+    const authenticated = cookie.split(';').some(c => c.trim() === 'auth=ok');
+    if (authenticated) return next();
+    res.redirect('/login');
+}
+
+// Login page
+app.get('/login', (_req, res) => {
+    res.send(`<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - WhatsApp Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:#0f172a;color:#f8fafc;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.login-card{background:#1e293b;border-radius:1.5rem;padding:2.5rem;width:100%;max-width:380px;box-shadow:0 0 40px rgba(0,0,0,.4)}
+h1{font-size:1.5rem;margin-bottom:.25rem}h1 span{color:#10b981}
+p{color:#94a3b8;font-size:.875rem;margin-bottom:2rem}
+label{display:block;font-size:.8rem;color:#94a3b8;margin-bottom:.4rem}
+input{width:100%;background:#0f172a;border:1px solid #334155;border-radius:.75rem;padding:.85rem 1rem;color:#f8fafc;font-family:'Outfit',sans-serif;font-size:1rem;outline:none;margin-bottom:1.25rem}
+input:focus{border-color:#10b981}
+button{width:100%;background:#10b981;border:none;border-radius:.75rem;padding:.85rem;color:#fff;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:background .2s}
+button:hover{background:#059669}
+.error{color:#ef4444;font-size:.85rem;margin-bottom:1rem;display:none}
+</style>
+</head>
+<body>
+<div class="login-card">
+  <h1>WhatsApp <span>Control</span></h1>
+  <p>Faça login para acessar o painel.</p>
+  <div class="error" id="err">Usuário ou senha incorretos.</div>
+  <form method="POST" action="/login">
+    <label>Usuário</label>
+    <input type="text" name="username" placeholder="admin" autofocus>
+    <label>Senha</label>
+    <input type="password" name="password" placeholder="••••••">
+    <button type="submit">Entrar</button>
+  </form>
+</div>
+<script>
+  const p = new URLSearchParams(location.search);
+  if(p.get('err')) document.getElementById('err').style.display='block';
+</script>
+</body>
+</html>`);
+});
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    if (username === AUTH_USER && password === AUTH_PASS) {
+        res.setHeader('Set-Cookie', 'auth=ok; Path=/; HttpOnly; SameSite=Strict');
+        res.redirect('/');
+    } else {
+        res.redirect('/login?err=1');
+    }
+});
+
+app.get('/logout', (_req, res) => {
+    res.setHeader('Set-Cookie', 'auth=; Path=/; Max-Age=0');
+    res.redirect('/login');
+});
+
+// Arquivos estáticos (protegidos)
+app.use(requireAuth, express.static(path.join(__dirname, 'public')));
 
 // Health check para Cloud Run
 app.get('/health', (_req, res) => {

@@ -446,6 +446,49 @@ button.danger:hover {
     color: #f87171;
 }
 
+button.danger.mini {
+    margin-top: 0;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
+}
+
+.tabs-with-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tabs-left {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.tabs-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-logout {
+    background: transparent;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
+    font-family: 'Outfit', sans-serif;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-logout:hover {
+    background: #1e293b;
+    color: #f8fafc;
+}
+
 .actions {
     display: flex;
     justify-content: center;
