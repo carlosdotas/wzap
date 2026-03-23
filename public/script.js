@@ -82,28 +82,17 @@ function renderClientes(list) {
                 <span class="nome">${cliente.nome || 'Sem Nome'}</span>
                 <span class="telefone">${cliente.telefone || 'Sem Telefone'}</span>
             </div>
-            <button class="ai-toggle-btn ${cliente.aiEnabled ? 'active' : ''}" title="Alternar Resposta IA">
-                🤖
-            </button>
         `;
 
-        // Clique na info para preencher número
         div.querySelector('.cliente-info').addEventListener('click', () => {
             const phone = formatPhoneForWhatsApp(cliente.telefone || '');
-            const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
+            const activeTab = document.querySelector('.tab-btn[data-tab].active')?.dataset.tab;
             if (activeTab === 'single') phoneInput.value = phone;
             if (activeTab === 'schedule') schedulePhoneInput.value = phone;
             if (activeTab === 'bulk') {
                 const current = bulkNumbersInput.value.trim();
                 bulkNumbersInput.value = current ? current + '\n' + phone : phone;
             }
-        });
-
-        // Clique no botão de IA
-        div.querySelector('.ai-toggle-btn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            const newState = !cliente.aiEnabled;
-            socket.emit('toggle-ai-client', { id: cliente.id, enabled: newState });
         });
 
         clientesSidebarContainer.appendChild(div);
@@ -143,8 +132,11 @@ document.querySelectorAll('[data-subtab]').forEach(btn => {
 
         if (mode === 'text') {
             updateTextStatusPreview();
-        } else if (!selectedMedia) {
+        } else {
+            selectedMedia = null;
             statusPreview.classList.add('hidden');
+            statusPreview.innerHTML = '';
+            statusFileInput.value = '';
         }
     });
 });
@@ -224,10 +216,10 @@ statusFileInput.addEventListener('change', (e) => {
     }
 });
 
-// Tab Logic
-document.querySelectorAll('.tab-btn').forEach(btn => {
+// Tab Logic (only main tabs with data-tab, not subtabs)
+document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
     btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
 
         btn.classList.add('active');
