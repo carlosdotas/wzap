@@ -1,9 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const DB_FILE = process.env.NODE_ENV === 'production'
-    ? '/tmp/db.json'
-    : path.join(__dirname, 'db.json');
+const dataDir = process.env.DATA_DIR || __dirname;
+const DB_FILE = path.join(dataDir, 'db.json');
 
 const defaultData = {
     scheduledMessages: [],

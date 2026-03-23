@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm uninstall:*)",
+      "Bash(node --check index.js)",
+      "Bash(gh auth:*)",
+      "Bash(gh repo:*)",
+      "Bash(xargs -I {} gh repo delete {} --yes)",
+      "Bash(gh api:*)",
+      "Bash(gcloud version:*)",
+      "Bash(\"/c/Users/windows/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud\" version)",
+      "Bash(\"/c/Users/windows/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud\" auth login --brief)",
+      "Bash(\"/c/Users/windows/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud\" auth list)",
+      "Bash(\"/c/Users/windows/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud\" projects list)",
+      "Bash(\"/c/Users/windows/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin/gcloud\" projects create wzap --name=wzap)",
+      "Bash(gcloud run:*)",
+      "Bash(gcloud artifacts:*)",
+      "Bash(gcloud builds:*)",
+      "Bash(for region:*)",
+      "Bash(do echo:*)",
+      "Bash(done)",
+      "Bash(curl -s https://wzap-jlkeuy3xfa-rj.a.run.app/health)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://wzap-jlkeuy3xfa-rj.a.run.app/health)",
+      "Bash(curl -s https://wzap-1011017405068.southamerica-east1.run.app/health)",
+      "Bash(gcloud logging:*)",
+      "Bash(grep -v \"^$\")",
+      "Bash(railway --version)",
+      "Bash(gcloud compute:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://34.39.219.177/)"
+    ]
+  }
+}

@@ -20,10 +20,9 @@ function runFfmpeg(args) {
     });
 }
 
-// Em produção (Cloud Run), usar /tmp que é garantidamente gravável
-const tmpDir = process.env.NODE_ENV === 'production'
-    ? '/tmp/wwebjs_tmp'
-    : path.join(__dirname, 'tmp');
+// Diretório temporário: usa DATA_DIR se definido (VPS), senão pasta local
+const dataDir = process.env.DATA_DIR || __dirname;
+const tmpDir = path.join(dataDir, 'tmp');
 if (!fs.existsSync(tmpDir)) {
     fs.mkdirSync(tmpDir, { recursive: true });
 }
@@ -62,8 +61,8 @@ const port = process.env.PORT || 3000;
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
-// Em produção, armazena sessão no /tmp (gravável no Cloud Run)
-const authDataPath = process.env.NODE_ENV === 'production' ? '/tmp' : undefined;
+// Sessão do WhatsApp: usa DATA_DIR se definido (VPS persistente), senão pasta local
+const authDataPath = process.env.DATA_DIR || undefined;
 
 // Configuração do WhatsApp
 const client = new Client({
