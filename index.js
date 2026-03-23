@@ -338,6 +338,35 @@ const swaggerSpec = {
                 }
             }
         },
+        '/api/send-status': {
+            post: {
+                tags: ['Mensagens'],
+                summary: 'Postar no Status do WhatsApp',
+                description: 'Posta um texto ou mídia (imagem/vídeo) no Status do WhatsApp (`status@broadcast`). Aceita texto simples, URL pública ou Base64.',
+                requestBody: {
+                    required: true,
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    message: { type: 'string', example: 'Bom dia! 🌅', description: 'Texto do status (obrigatório se não enviar mídia)' },
+                                    url: { type: 'string', example: 'https://example.com/imagem.jpg', description: 'URL pública da mídia (use url OU base64)' },
+                                    base64: { type: 'string', description: 'Conteúdo da mídia em Base64' },
+                                    mimetype: { type: 'string', example: 'image/jpeg', description: 'MIME type (obrigatório se enviar mídia)' },
+                                    filename: { type: 'string', example: 'status.jpg' }
+                                }
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    200: { description: 'Status postado com sucesso' },
+                    400: { description: 'Parâmetros inválidos' },
+                    503: { description: 'WhatsApp não conectado' }
+                }
+            }
+        },
         '/api/apikey/regenerate': {
             post: {
                 tags: ['Sistema'],
@@ -420,6 +449,33 @@ app.post('/api/send-media', requireApiKey, async (req, res) => {
         db.logs.sent.push({ to: chatId, message: caption || `[mídia: ${mimetype}]`, type: 'api_media', timestamp: new Date().toISOString() });
         saveDB(db);
         res.json({ success: true, to: chatId });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/send-status', requireApiKey, async (req, res) => {
+    const { message, url, base64, mimetype, filename } = req.body;
+    if (!message && !url && !base64) {
+        return res.status(400).json({ error: 'Forneça message (texto) ou mídia (url ou base64 + mimetype)' });
+    }
+    if (whatsappStatus !== 'Conectado') return res.status(503).json({ error: 'WhatsApp não conectado' });
+    try {
+        if (url || base64) {
+            if (!mimetype) return res.status(400).json({ error: 'mimetype é obrigatório para mídia' });
+            let media;
+            if (url) {
+                media = await MessageMedia.fromUrl(url, { unsafeMime: true });
+            } else {
+                const b64 = base64.includes(',') ? base64.split(',')[1] : base64;
+                media = new MessageMedia(mimetype, b64, filename || 'status-media');
+            }
+            await client.sendMessage('status@broadcast', media, { caption: message || '' });
+        } else {
+            await client.sendMessage('status@broadcast', message);
+        }
+        io.emit('log', `📢 API: status postado`);
+        res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
