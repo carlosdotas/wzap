@@ -540,10 +540,7 @@ X-API-Key: <span class="str">sua-chave</span>
 </html>`);
 });
 
-// Arquivos estáticos (protegidos)
-app.use(requireAuth, express.static(path.join(__dirname, 'public')));
-
-// REST API routes
+// REST API routes (antes do requireAuth para não ser interceptado pelo redirect de login)
 app.get('/api/status', requireApiKey, (req, res) => {
     res.json({ status: whatsappStatus, connected: whatsappStatus === 'Conectado' });
 });
@@ -639,6 +636,9 @@ app.get('/api/messages', requireApiKey, (_req, res) => {
     const received = (db.logs && db.logs.received) ? db.logs.received : [];
     res.json(received.slice(-200).reverse());
 });
+
+// Arquivos estáticos (protegidos por sessão)
+app.use(requireAuth, express.static(path.join(__dirname, 'public')));
 
 // Health check para Cloud Run
 app.get('/health', (_req, res) => {
